@@ -6,8 +6,23 @@
 
 <body>
 
-    <div class="container" id="app">
-      {{ message }}
+    <div class="container mt-3" id="app">
+      <div class="row text-left">
+        <div class="col-6">
+
+          {{ name.length === 0 ? message : "Salut " + name + ", faisons quelques exercices" }}
+        </div>
+
+        <div class="col-6 text-left">
+          <input type="text" v-model="name"/>
+        </div>
+
+        <div id=equation-container class="row mt-5">
+          Equation container
+        </div>
+
+      </div>
+
     </div>
 
 
@@ -18,9 +33,7 @@
 
     <!-- vue.js -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script type="text/javascript" src="js/arithmetics.js">
-
-    </script>
+    <script type="text/javascript" src="js/arithmetics.js"></script>
 </body>
 
 </html>
