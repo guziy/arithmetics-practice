@@ -2,29 +2,92 @@
 
 <head>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
 </head>
 
 <body>
 
-    <div class="container mt-3" id="app">
-      <div class="row text-left">
-        <div class="col-6">
+    <div class="container m-3" id="app">
+      <div class="row text-left m-5 p-3">
+        <div class="col-4">
 
-          {{ name.length === 0 ? message : "Salut " + name + ", faisons quelques exercices" }}
+          <div v-if="name.length === 0">
+            SVP entrez votre nom:
+          </div>
+          <div v-else>
+            Salut <b>{{name}}</b>, faisons quelques exercices!
+          </div>
+
         </div>
 
-        <div class="col-6 text-left">
+        <div class="col-2 text-left">
           <input type="text" v-model="name"/>
-        </div>
-
-        <div id=equation-container class="row mt-5">
-          Equation container
         </div>
 
       </div>
 
+        <div id=equation-container class="row m-5">
+          <div class="col-12 mb-3" v-if="n_tried >= 0">Entrez les nombres manquants:</div>
+          <ul class="list-group col-9">
+            <li class="list-group-item" v-for="(triple, eq_index) in triples" v-show="n_tried >= eq_index">
+
+              <equation :equation_index="eq_index"
+                        :num1="triple[0]"
+                        :num2="triple[1]"
+                        :num3="triple[2]"
+                        :operation="operations[eq_index]"
+                        :input_index="input_index[eq_index]"
+                        :n_tried="n_tried" @oncorrect-equation="on_correct"></equation>
+
+            </li>
+          </ul>
+
+          <div id="end-message" class="col-12" v-if="n_tried > 0">
+            Votre score est {{n_correct}} de {{n_total}}.<br/>
+            <span v-if="n_tried === n_total">L'exercice est termine: {{name}},</span>
+            <span v-if="n_correct == n_total">vous etes un genie!</span>
+            <span v-else-if="(n_correct > 0.5 * n_total) && n_tried === n_total">bien joue, mais il y a de l'espace pour amelioration!</span>
+            <span v-else-if="(n_correct <= 0.5 * n_total) && n_tried === n_total">il faut pratiquer plus!</span>
+
+          </div>
+
+        </div>
+
+
     </div>
 
+
+ <!-- equqtion template -->
+    <template id="equation">
+      <div class="row">
+
+        <div class="col-6">
+          <span v-for="token in tokens">
+            <span v-if="token === -1">
+              <input size="4"  v-model.number="user_answer" :disabled="corrected" />
+            </span>
+            <span v-else>
+              {{token}}
+            </span>
+          </span>
+        </div>
+
+        <div v-if="!corrected">
+          <button type="button" @click="on_correct()">Corriger!</button>
+          <i class="fa fa-spinner fa-spin"></i>
+        </div>
+        <div v-if="corrected && is_correct" class="text-success">
+          <i class="fa fa-check"></i>
+          Bien joue!
+        </div>
+        <div v-if="corrected && !is_correct" class="text-danger">
+            <i class="fa fa-times"></i>
+            La reponse est: {{correct_answer}}.
+        </div>
+
+      </div>
+    </template>
 
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
