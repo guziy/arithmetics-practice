@@ -1,5 +1,6 @@
 
 
+
 var equation = Vue.component('equation', {
 
     props:['equation_index', 'num1', 'num2', 'num3', 'operation', 'input_index',
@@ -112,7 +113,9 @@ var app = new Vue({
 
     n_correct: 0,
 
-    n_tried: 0,
+    n_tried: -1,
+    start_time: "",
+    elapsed_time: ""
   },
   components: {
     equation: equation,
@@ -166,6 +169,15 @@ var app = new Vue({
       this.n_tried++;
       this.n_correct += event.correct;
 
+    },
+    on_start: function(){
+      this.n_tried = 0;
+      this.n_correct = 0;
+      this.start_time = moment();
+      console.log(this.start_time.format());
     }
+
+
+
   }
 });

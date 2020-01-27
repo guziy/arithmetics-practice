@@ -11,20 +11,26 @@
     <div class="container m-3" id="app">
       <div class="row text-left m-5 p-3">
         <div class="col-4">
-
-          <div v-if="name.length === 0">
             SVP entrez votre nom:
-          </div>
-          <div v-else>
-            Salut <b>{{name}}</b>, faisons quelques exercices!
-          </div>
-
         </div>
+
 
         <div class="col-2 text-left">
           <input type="text" v-model="name"/>
         </div>
 
+      </div>
+
+      <div class="row">
+        <div class="col text-center p-3">
+            Salut <b>{{name}}</b>, faisons quelques exercices!
+        </div>
+      </div>
+
+      <div class="row text-center">
+        <div class="col text-center">
+          <button type="button" name="button" @click="on_start">Oui, on commence</button>
+        </div>
       </div>
 
         <div id=equation-container class="row m-5">
@@ -95,6 +101,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <!-- vue.js -->
+    <script src="./js/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script type="text/javascript" src="js/arithmetics.js"></script>
 </body>
