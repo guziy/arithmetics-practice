@@ -1,0 +1,24 @@
+{
+  "name": "arithmetics-practice",
+  "version": "1.0.0",
+  "description": "arithmetics practice ",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guziy/arithmetics-practice.git"
+  },
+  "author": "Oleksandr (Sasha)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guziy/arithmetics-practice/issues"
+  },
+  "homepage": "https://github.com/guziy/arithmetics-practice#readme",
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "jquery": "^3.4.1",
+    "vue": "^2.6.11"
+  }
+}
