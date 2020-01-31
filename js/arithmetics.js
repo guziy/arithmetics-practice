@@ -1,6 +1,5 @@
 
 
-
 var equation = Vue.component('equation', {
 
     props:['equation_index', 'num1', 'num2', 'num3', 'operation', 'input_index',
@@ -53,8 +52,8 @@ var equation = Vue.component('equation', {
       } else {
         console.log("operation: " + this.operation + "is not implemented.");
       }
-
-
+      this.corrected = false;
+      this.correct = false;
     },
 
     methods: {
@@ -84,6 +83,13 @@ var equation = Vue.component('equation', {
       }
 
     },
+    watch: {
+      n_tried: function(newVal, oldVal){
+        if (newVal === -1) {
+          this.created();
+        }
+      }
+    }
 
 });
 
@@ -115,7 +121,8 @@ var app = new Vue({
 
     n_tried: -1,
     start_time: "",
-    elapsed_time: ""
+    elapsed_time: 0,
+    current_time: ""
   },
   components: {
     equation: equation,
@@ -174,8 +181,17 @@ var app = new Vue({
       this.n_tried = 0;
       this.n_correct = 0;
       this.start_time = moment();
+
       console.log(this.start_time.format());
+    },
+    get_current_time: function (){
+      return moment();
+    },
+    get_elapsed_time: function(){
+      return this.start_time.fromNow();
     }
+
+
 
 
 
