@@ -1,10 +1,12 @@
 
 
+momentDurationFormatSetup(moment);
+
 var equation = Vue.component('equation', {
 
     props:['equation_index', 'num1', 'num2', 'num3', 'operation', 'input_index',
             'n_tried'],
-    data: function () {
+    data: function(){
       return {
         visible: this.is_visible(),
         tokens: this.get_equation_tokens(),
@@ -166,6 +168,8 @@ var app = new Vue({
       t[this.input_index[this.input_index.length - 1]] = -1;
       this.triples.push(t);
     }
+    //register getting elapsed_time every second
+    setInterval(this.get_elapsed_time, 1000);
 
   },
   methods: {
@@ -188,12 +192,10 @@ var app = new Vue({
       return moment();
     },
     get_elapsed_time: function(){
-      return this.start_time.fromNow();
+      dt = moment.duration(this.get_current_time().diff(this.start_time));
+      this.elapsed_time = dt.format("mm") + " minutes et " + dt.format("ss") + " secondes";
+      return this.elapsed_time;
     }
-
-
-
-
 
   }
 });

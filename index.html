@@ -9,7 +9,7 @@
 <body>
 
     <div class="container m-3" id="app">
-      <div class="row text-left m-5 p-3">
+      <div class="row text-left m-3 p-3">
         <div class="col-4">
             SVP entrez votre nom:
         </div>
@@ -35,7 +35,9 @@
       </div>
 
       <div v-if="start_time != ''" class="row">
-        {{get_elapsed_time()}}
+        <div class="col text-center m-3">
+            Temps ecoulé: {{elapsed_time}}
+        </div>
       </div>
 
         <div id=equation-container class="row m-5">
@@ -58,7 +60,7 @@
             Votre score est {{n_correct}} de {{n_total}}.<br/>
             <span v-if="n_tried === n_total">L'exercice est termine: {{name}},</span>
             <span v-if="n_correct == n_total">vous etes un genie!</span>
-            <span v-else-if="(n_correct > 0.5 * n_total) && n_tried === n_total">bien joue, mais il y a de l'espace pour amelioration!</span>
+            <span v-else-if="(n_correct > 0.5 * n_total) && n_tried === n_total">bien joué, mais il y a de l'espace pour amelioration!</span>
             <span v-else-if="(n_correct <= 0.5 * n_total) && n_tried === n_total">il faut pratiquer plus!</span>
 
           </div>
@@ -90,7 +92,7 @@
         </div>
         <div v-if="corrected && is_correct" class="text-success">
           <i class="fa fa-check"></i>
-          Bien joue!
+          Bien joué!
         </div>
         <div v-if="corrected && !is_correct" class="text-danger">
             <i class="fa fa-times"></i>
@@ -111,12 +113,13 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     -->
-    <script src="./js/moment.min.js"></script>
+    <script type="text/javascript" src="node_modules/moment-duration-format/lib/moment-duration-format.js"></script>
+    <script src="./node_modules/moment/moment.js"></script>
     <!-- vue.js -->
 <!--
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 -->
-    <script src="node_modules/vue/dist/vue.min.js"></script>
+    <script src="node_modules/vue/dist/vue.js"></script>
     <script type="text/javascript" src="js/arithmetics.js"></script>
 </body>
 
