@@ -14,7 +14,7 @@ var equation = Vue.component('equation', {
         corrected: false,
         is_correct: false,
         warning_message: "",
-        correct_answer: -1
+        correct_answer: -1,
       }
     },
 
@@ -69,7 +69,13 @@ var equation = Vue.component('equation', {
 
 
         this.is_correct = this.correct_answer == this.user_answer;
-        this.$emit("oncorrect-equation", {correct: this.is_correct});
+
+        event = {
+          correct: this.is_correct,
+
+        };
+
+        this.$emit("oncorrect-equation", event);
         this.corrected = true;
       },
       is_visible: function() {
@@ -179,7 +185,6 @@ var app = new Vue({
       console.log(event);
       this.n_tried++;
       this.n_correct += event.correct;
-
     },
     on_start: function(){
       this.n_tried = 0;

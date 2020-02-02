@@ -2,7 +2,7 @@
 
 <head>
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 
 </head>
 
@@ -78,7 +78,7 @@
         <div class="col-6">
           <span v-for="token in tokens">
             <span v-if="token === -1">
-              <input size="4"  v-model.number="user_answer" :disabled="corrected" />
+              <input size="4"  v-model.number="user_answer" :disabled="corrected"/>
             </span>
             <span v-else>
               {{token}}
