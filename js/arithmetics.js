@@ -2,60 +2,39 @@
 
 momentDurationFormatSetup(moment);
 
+/** initial state of the equation component comp
+*/
+function equation_initial_state() {
+
+  return {
+    visible: false,
+    tokens: [],
+    user_answer: "",
+    corrected: false,
+    is_correct: false,
+    warning_message: "",
+    correct_answer: -1,
+  };
+}
+
+
 var equation = Vue.component('equation', {
 
-    props:['equation_index', 'num1', 'num2', 'num3', 'operation', 'input_index',
-            'n_tried'],
+    props:["equation_data",
+           'n_tried'],
     data: function(){
-      return {
-        visible: this.is_visible(),
-        tokens: this.get_equation_tokens(),
-        user_answer: "",
-        corrected: false,
-        is_correct: false,
-        warning_message: "",
-        correct_answer: -1,
-      }
+      return equation_initial_state();
     },
-
     template: "#equation",
 
     created: function() {
-      var nums = [this.num1, this.num2, this.num3];
+      // this.event_bus.$on("init-equations", this.init_equation);
+      this.init_equation();
+    },
 
-      if (this.operation === "+") {
-        switch (this.input_index) {
-          case 0:
-            this.correct_answer = nums[2] - nums[1];
-            break;
+    mounted: function () {
 
-          case 1:
-            this.correct_answer = nums[2] - nums[0];
-            break;
-
-          case 2:
-            this.correct_answer = nums[0] + nums[1];
-            break;
-        }
-      } else if (this.operation === "-") {
-        switch (this.input_index) {
-          case 0:
-            this.correct_answer = nums[1] + nums[2];
-            break;
-
-          case 1:
-            this.correct_answer = nums[0] - nums[2];
-            break;
-
-          case 2:
-            this.correct_answer = nums[0] - nums[1];
-            break;
-        }
-      } else {
-        console.log("operation: " + this.operation + "is not implemented.");
-      }
-      this.corrected = false;
-      this.correct = false;
+      //this.event_bus.$on("init-equations", this.init_equation);
     },
 
     methods: {
@@ -79,26 +58,74 @@ var equation = Vue.component('equation', {
         this.corrected = true;
       },
       is_visible: function() {
-        return this.equation_index === this.n_tried;
+        return this.equation_data.equation_index === this.n_tried;
       },
 
       get_equation_tokens: function() {
-        var tokens = [this.num1, this.num2, this.num3];
+        var tokens = this.equation_data.triple.slice();
         tokens.splice(2, 0, '=');
-        tokens.splice(1, 0, this.operation);
+        tokens.splice(1, 0, this.equation_data.operation);
 
         return tokens
-      }
+      },
 
-    },
+      init_equation: function () {
+        var nums = this.equation_data.triple;
+        //console.log("init_equation with " + nums.join(",") );
+
+        if (this.equation_data.operation === "+") {
+          switch (this.equation_data.input_index) {
+            case 0:
+              this.correct_answer = nums[2] - nums[1];
+              break;
+
+            case 1:
+              this.correct_answer = nums[2] - nums[0];
+              break;
+
+            case 2:
+              this.correct_answer = nums[0] + nums[1];
+              break;
+          }
+        } else if (this.equation_data.operation === "-") {
+          switch (this.equation_data.input_index) {
+            case 0:
+              this.correct_answer = nums[1] + nums[2];
+              break;
+
+            case 1:
+              this.correct_answer = nums[0] - nums[2];
+              break;
+
+            case 2:
+              this.correct_answer = nums[0] - nums[1];
+              break;
+          }
+        } else {
+          console.log("operation: " + this.operation + "is not implemented.");
+        }
+        this.corrected = false;
+        this.correct = false;
+        this.user_answer = "";
+
+        this.tokens = this.get_equation_tokens();
+        this.visible = this.is_visible();
+
+      },
+
+    }, // methods
     watch: {
-      n_tried: function(newVal, oldVal){
-        if (newVal === -1) {
-          this.created();
+      equation_data: function(newVal, oldVal){
+        this.init_equation();
+      },
+      visible: function(newVal, oldVal){
+        if (newVal){
+          console.log(this.$refs.input[0]);
+          this.$refs.input[0].focus();
         }
       }
-    }
 
+    }
 });
 
 
@@ -118,62 +145,21 @@ var app = new Vue({
     name: '',
 
     n_total: 10,
-    // triples of numbers
-    triples: [],
-    // index of the field 0,1 or 2
-    input_index: [],
-    //which operations
-    operations: [],
+
+    equation_data: [],
 
     n_correct: 0,
 
     n_tried: -1,
     start_time: "",
     elapsed_time: 0,
-    current_time: ""
+    current_time: "",
   },
   components: {
     equation: equation,
   },
   created: function(){
-    const MAX_NUM = 100;
-    var i;
-    var num1, num2, num3;
-    var additon;
-    var r; // from [0, 1)
-    for (i = 0; i < this.n_total; i++) {
-      console.log(i);
-
-      r = Math.random();
-
-      additon = r < 0.5;
-
-      num1 = Math.floor(r * MAX_NUM);
-
-      num2 = Math.floor(r * num1);
-
-      if (num1 < 10){
-        num1 += 13;
-        num2 += 8;
-      }
-
-      if (num1 + num2 > MAX_NUM) {
-        additon = false;
-      }
-
-      if (additon){
-        num3 = num1 + num2;
-        this.operations.push("+")
-      } else {
-        num3 = num1 - num2;
-        this.operations.push("-")
-      }
-
-      this.input_index.push(Math.floor(3 * Math.random()))
-      t = [num1, num2, num3]
-      t[this.input_index[this.input_index.length - 1]] = -1;
-      this.triples.push(t);
-    }
+    //this.generate_equation_data();
     //register getting elapsed_time every second
     setInterval(this.get_elapsed_time, 1000);
 
@@ -186,20 +172,67 @@ var app = new Vue({
       this.n_tried++;
       this.n_correct += event.correct;
     },
+    //on commence btn action
     on_start: function(){
-      this.n_tried = 0;
-      this.n_correct = 0;
+      this.generate_equation_data();
       this.start_time = moment();
-
-      console.log(this.start_time.format());
     },
     get_current_time: function (){
       return moment();
     },
     get_elapsed_time: function(){
       dt = moment.duration(this.get_current_time().diff(this.start_time));
-      this.elapsed_time = dt.format("mm") + " minutes et " + dt.format("ss") + " secondes";
+      this.elapsed_time = dt.format("mm [min] ss [sec]");
       return this.elapsed_time;
+    },
+    generate_equation_data: function () {
+      this.equation_data = [];
+      this.n_tried = 0;
+      this.n_correct = 0;
+
+
+      const MAX_NUM = 100;
+      var i;
+      var num1, num2, num3;
+      var additon;
+      var r; // from [0, 1)
+      for (i = 0; i < this.n_total; i++) {
+        //console.log(i);
+
+        r = Math.random();
+
+        additon = r < 0.5;
+
+        num1 = Math.floor(r * MAX_NUM);
+
+        num2 = Math.floor(r * num1);
+
+        if (num1 < 10){
+          num1 += 13;
+          num2 += 8;
+        }
+
+        if (num1 + num2 > MAX_NUM) {
+          additon = false;
+        }
+
+        var operation;
+        if (additon){
+          num3 = num1 + num2;
+          operation = "+";
+        } else {
+          num3 = num1 - num2;
+          operation = "-";
+        }
+
+        var input_index;
+        input_index = Math.floor(3 * Math.random());
+        t = [num1, num2, num3];
+        t[input_index] = -1;
+        this.equation_data.push(
+          {triple: t, operation: operation, input_index: input_index, equation_index: i}
+        );
+      }
     }
 
   }

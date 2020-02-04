@@ -43,15 +43,11 @@
         <div id=equation-container class="row m-5">
           <div class="col-12 mb-3" v-if="n_tried >= 0">Entrez les nombres manquants:</div>
           <ul class="list-group col-9">
-            <li class="list-group-item" v-for="(triple, eq_index) in triples" v-show="n_tried >= eq_index">
+            <li class="list-group-item" v-for="eq in equation_data" v-show="n_tried >= eq.equation_index">
 
-              <equation :equation_index="eq_index"
-                        :num1="triple[0]"
-                        :num2="triple[1]"
-                        :num3="triple[2]"
-                        :operation="operations[eq_index]"
-                        :input_index="input_index[eq_index]"
-                        :n_tried="n_tried" @oncorrect-equation="on_correct"></equation>
+              <equation :equation_data="eq"
+                        :n_tried="n_tried" @oncorrect-equation="on_correct"
+                        ></equation>
 
             </li>
           </ul>
@@ -73,12 +69,12 @@
 
  <!-- equqtion template -->
     <template id="equation">
-      <div class="row">
+      <div class="row justify-content-left">
 
-        <div class="col-6">
+        <div class="col-6 p-2">
           <span v-for="token in tokens">
             <span v-if="token === -1">
-              <input size="4"  v-model.number="user_answer" :disabled="corrected"/>
+              <input size="4"  v-model.number="user_answer" :disabled="corrected" ref="input"/>
             </span>
             <span v-else>
               {{token}}
@@ -86,15 +82,15 @@
           </span>
         </div>
 
-        <div v-if="!corrected">
+        <div v-if="!corrected" class="p-2">
           <button type="button" @click="on_correct()">Corriger!</button>
           <i class="fa fa-spinner fa-spin"></i>
         </div>
-        <div v-if="corrected && is_correct" class="text-success">
+        <div v-if="corrected && is_correct" class="text-success p-2">
           <i class="fa fa-check"></i>
           Bien joué!
         </div>
-        <div v-if="corrected && !is_correct" class="text-danger">
+        <div v-if="corrected && !is_correct" class="text-danger p-2">
             <i class="fa fa-times"></i>
             La reponse est: {{correct_answer}}.
         </div>
