@@ -45,7 +45,7 @@
           <ul class="list-group col-9">
             <li class="list-group-item" v-for="eq in equation_data" v-show="n_tried >= eq.equation_index">
 
-              <equation :equation_data="eq"
+              <equation :equation_data="eq" :event_bus="event_bus"
                         :n_tried="n_tried" @oncorrect-equation="on_correct"
                         ></equation>
 
@@ -54,7 +54,7 @@
 
           <div id="end-message" class="col-12" v-if="n_tried > 0">
             Votre score est {{n_correct}} de {{n_total}}.<br/>
-            <span v-if="n_tried === n_total">L'exercice est termine: {{name}},</span>
+            <span v-if="n_tried === n_total">L'exercice est terminé: {{name}},</span>
             <span v-if="n_correct == n_total">vous etes un genie!</span>
             <span v-else-if="(n_correct > 0.5 * n_total) && n_tried === n_total">bien joué, mais il y a de l'espace pour amelioration!</span>
             <span v-else-if="(n_correct <= 0.5 * n_total) && n_tried === n_total">il faut pratiquer plus!</span>
@@ -74,7 +74,7 @@
         <div class="col-6 p-2">
           <span v-for="token in tokens">
             <span v-if="token === -1">
-              <input size="4"  v-model.number="user_answer" :disabled="corrected" ref="input"/>
+              <input size="4"  v-model.number="user_answer" v-on:keyup.enter="on_correct()" :disabled="corrected" ref="input"/>
             </span>
             <span v-else>
               {{token}}

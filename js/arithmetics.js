@@ -20,7 +20,7 @@ function equation_initial_state() {
 
 var equation = Vue.component('equation', {
 
-    props:["equation_data",
+    props:["equation_data", "event_bus",
            'n_tried'],
     data: function(){
       return equation_initial_state();
@@ -30,11 +30,22 @@ var equation = Vue.component('equation', {
     created: function() {
       // this.event_bus.$on("init-equations", this.init_equation);
       this.init_equation();
+
+      // listen to the event bus, to focus next equation input on correct
+      this.event_bus.$on("focus-equation", (event) => {
+        //console.log(this.equation_data.equation_index + "-- received --> " + event);
+        if (event.src_index + 1 == this.equation_data.equation_index) {
+          this.$nextTick(
+            () => {
+                if (this.is_visible()){
+                    this.$refs.input[0].focus();
+                }
+            });
+        }
+      }); // this.event_bus.$on
     },
 
     mounted: function () {
-
-      //this.event_bus.$on("init-equations", this.init_equation);
     },
 
     methods: {
@@ -46,7 +57,6 @@ var equation = Vue.component('equation', {
           return
         }
 
-
         this.is_correct = this.correct_answer == this.user_answer;
 
         event = {
@@ -55,10 +65,11 @@ var equation = Vue.component('equation', {
         };
 
         this.$emit("oncorrect-equation", event);
+        this.event_bus.$emit("focus-equation", {src_index: this.equation_data.equation_index});
         this.corrected = true;
       },
       is_visible: function() {
-        return this.equation_data.equation_index === this.n_tried;
+        return this.equation_data.equation_index <= this.n_tried;
       },
 
       get_equation_tokens: function() {
@@ -111,6 +122,15 @@ var equation = Vue.component('equation', {
         this.tokens = this.get_equation_tokens();
         this.visible = this.is_visible();
 
+        // ficus the input if required
+        this.$nextTick(
+          () => {
+              if (this.is_visible()){
+                  this.$refs.input[0].focus();
+              }
+          }
+        );
+
       },
 
     }, // methods
@@ -118,13 +138,6 @@ var equation = Vue.component('equation', {
       equation_data: function(newVal, oldVal){
         this.init_equation();
       },
-      visible: function(newVal, oldVal){
-        if (newVal){
-          console.log(this.$refs.input[0]);
-          this.$refs.input[0].focus();
-        }
-      }
-
     }
 });
 
@@ -154,6 +167,7 @@ var app = new Vue({
     start_time: "",
     elapsed_time: 0,
     current_time: "",
+    event_bus: new Vue()
   },
   components: {
     equation: equation,
@@ -166,9 +180,6 @@ var app = new Vue({
   },
   methods: {
     on_correct: function (event){
-
-      // todo
-      console.log(event);
       this.n_tried++;
       this.n_correct += event.correct;
     },
