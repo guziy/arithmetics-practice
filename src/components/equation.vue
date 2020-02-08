@@ -1,6 +1,5 @@
 <script>
 
-momentDurationFormatSetup(moment);
 
 /** initial state of the equation component comp
 */
@@ -139,7 +138,9 @@ export default {
     }, // methods
     watch: {
       equation_data: function(newVal, oldVal){
-        this.init_equation();
+        if (newVal != oldVal) {
+            this.init_equation();
+        }
       },
     }
 }
@@ -150,7 +151,7 @@ export default {
   <div class="row justify-content-left">
 
     <div class="col-6 p-2">
-      <span v-for="token in tokens">
+      <span v-for="token in tokens" v-bind:key="token">
         <span v-if="token === -1">
           <input size="4"  v-model.number="user_answer" v-on:keyup.enter="on_correct()" :disabled="corrected" ref="input"/>
         </span>
