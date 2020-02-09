@@ -9,6 +9,7 @@ import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faStopwatch } from '@fortawesome/free-solid-svg-icons'
 
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -17,6 +18,7 @@ library.add(faUserSecret)
 library.add(faSpinner)
 library.add(faCheck)
 library.add(faTimes)
+library.add(faStopwatch)
 
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

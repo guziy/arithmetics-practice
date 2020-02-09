@@ -24,12 +24,13 @@
 
     </div>
 
+<!--
     <div v-if="start_time != ''" class="row">
       <div class="col text-center m-3">
           Temps ecoulé: <b>{{elapsed_time}}</b>
       </div>
     </div>
-
+-->
       <div id=equation-container class="row m-5">
         <div class="col-12 mb-3" v-if="n_tried >= 0">Entrez les nombres manquants:</div>
 
@@ -48,6 +49,11 @@
 
         <div id="end-message" ref="end_message" class="col-12" v-if="n_tried >= 0">
           <div class="row justify-content-center">
+
+            <div class="col-3 p-3">
+              <font-awesome-icon icon="stopwatch" class="mr-3"/> {{elapsed_time}}
+            </div>
+
             <div class="col-3 p-3">
               <span class="text-success"><font-awesome-icon icon="check" class="mr-3"/> {{n_correct}}</span>
             </div>
@@ -56,7 +62,7 @@
               <span class="text-danger"><font-awesome-icon icon="times" class="mr-3"/>{{n_tried - n_correct}}</span>
             </div>
           </div>
-          <span v-if="n_tried === n_total">L'exercice est terminé {{name}},</span>
+          <span v-if="n_tried === n_total">L'exercice est terminé {{name}}, ca vous a pris {{elapsed_time}}: </span>
           <span v-if="n_correct == n_total">vous êtes un genie!</span>
           <span v-else-if="(n_correct > 0.5 * n_total) && n_tried === n_total">bien joué, mais il y a de l'espace pour amelioration!</span>
           <span v-else-if="(n_correct <= 0.5 * n_total) && n_tried === n_total">il faut pratiquer plus!</span>
@@ -110,26 +116,32 @@ export default {
   created: function(){
     //this.generate_equation_data();
     //register getting elapsed_time every second
-    let timer_refresh_interval_id = setInterval(this.get_elapsed_time, 1000);
 
-    this.event_bus.$on("focus-equation", (event) => {
-      if (event.src_index === this.n_total - 1) {
-        clearInterval(timer_refresh_interval_id);
-        this.$refs.end_message.scrollIntoView();
-      }
-    });
+    this.event_bus.$on("focus-equation", this.on_focus_equation);
 
 
   },
   methods: {
+
+    on_focus_equation: function(event){
+      if (event.src_index === this.n_total - 1) {
+        clearInterval(this.timer_refresh_interval_id);
+        this.$refs.end_message.scrollIntoView();
+      }
+    },
+
     on_correct: function (event){
       this.n_tried++;
       this.n_correct += event.correct;
     },
     //on commence btn action
     on_start: function(){
-      this.generate_equation_data();
       this.start_time = moment();
+      this.elapsed_time = this.get_elapsed_time();
+      this.timer_refresh_interval_id = setInterval(this.get_elapsed_time, 1000);
+      this.generate_equation_data();
+
+
     },
     get_current_time: function (){
       return moment();
