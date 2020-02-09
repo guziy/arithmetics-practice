@@ -1,12 +1,11 @@
 <template>
   <div class="container m-3" id="app">
-    <div class="row text-left m-3 p-3">
-      <div class="col-4">
+    <div class="row justify-content-left m-3 p-3">
+      <div class="col-3">
           SVP entrez votre nom:
       </div>
 
-
-      <div class="col-2 text-left">
+      <div class="col-3">
         <input type="text" v-model="name"/>
       </div>
 
@@ -33,20 +32,31 @@
 
       <div id=equation-container class="row m-5">
         <div class="col-12 mb-3" v-if="n_tried >= 0">Entrez les nombres manquants:</div>
-        <ul class="list-group col-9">
-          <li class="list-group-item" v-for="eq in equation_data"
-              v-bind:key="eq.equation_index" v-show="eq.equation_index <= n_tried">
 
-            <equation :equation_data="eq" :event_bus="event_bus"
-                      :n_tried="n_tried" @oncorrect-equation="on_correct"
-                      ></equation>
+        <div class="col-12">
+          <ul class="list-group">
+            <li class="list-group-item" v-for="eq in equation_data"
+                v-bind:key="eq.equation_index" v-show="eq.equation_index <= n_tried">
 
-          </li>
-        </ul>
+              <equation :equation_data="eq" :event_bus="event_bus"
+                        :n_tried="n_tried" @oncorrect-equation="on_correct"
+                        ></equation>
 
-        <div id="end-message" class="col-12" v-if="n_tried > 0">
-          Votre score est {{n_correct}} de {{n_total}}.<br/>
-          <span v-if="n_tried === n_total">L'exercice est terminé: {{name}},</span>
+            </li>
+          </ul>
+        </div>
+
+        <div id="end-message" ref="end_message" class="col-12" v-if="n_tried >= 0">
+          <div class="row justify-content-center">
+            <div class="col-3 p-3">
+              <span class="text-success"><font-awesome-icon icon="check" class="mr-3"/> {{n_correct}}</span>
+            </div>
+
+            <div class="col-3 p-3">
+              <span class="text-danger"><font-awesome-icon icon="times" class="mr-3"/>{{n_tried - n_correct}}</span>
+            </div>
+          </div>
+          <span v-if="n_tried === n_total">L'exercice est terminé {{name}},</span>
           <span v-if="n_correct == n_total">vous etes un genie!</span>
           <span v-else-if="(n_correct > 0.5 * n_total) && n_tried === n_total">bien joué, mais il y a de l'espace pour amelioration!</span>
           <span v-else-if="(n_correct <= 0.5 * n_total) && n_tried === n_total">il faut pratiquer plus!</span>
@@ -93,13 +103,23 @@ export default {
       start_time: "",
       elapsed_time: 0,
       current_time: "",
-      event_bus: new Vue()
+      event_bus: new Vue(),
+      timer_refresh_interval_id: -1
     }
   },
   created: function(){
     //this.generate_equation_data();
     //register getting elapsed_time every second
-    setInterval(this.get_elapsed_time, 1000);
+    let timer_refresh_interval_id = setInterval(this.get_elapsed_time, 1000);
+
+    this.event_bus.$on("focus-equation", (event) => {
+      if (event.src_index === this.n_total - 1) {
+        clearInterval(timer_refresh_interval_id);
+        this.$refs.end_message.scrollIntoView();
+      }
+    });
+
+
   },
   methods: {
     on_correct: function (event){
@@ -183,4 +203,14 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+/* Define an animation behavior */
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}
+/* This is the class name given by the Font Awesome component when icon contains 'spinner' */
+.fa-spinner {
+  /* Apply 'spinner' keyframes looping once every second (1s)  */
+  animation: spinner 1s linear infinite;
+}
+
 </style>

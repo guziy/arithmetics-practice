@@ -41,6 +41,7 @@ export default {
             () => {
                 if (this.is_visible()){
                     this.$refs.input[0].focus();
+                    this.$refs.input[0].scrollIntoView();
                 }
             });
         }
@@ -153,7 +154,8 @@ export default {
     <div class="col-6 p-2">
       <span v-for="token in tokens" v-bind:key="token">
         <span v-if="token === -1">
-          <input size="4"  v-model.number="user_answer" v-on:keyup.enter="on_correct()" :disabled="corrected" ref="input"/>
+          <input size="4"  v-model.number="user_answer"
+                 v-on:keyup.enter="on_correct()" :disabled="corrected" ref="input"/>
         </span>
         <span v-else>
           {{token}}
@@ -162,15 +164,21 @@ export default {
     </div>
 
     <div v-if="!corrected" class="p-2">
-      <button type="button" @click="on_correct()">Corriger!</button>
-      <i class="fa fa-spinner fa-spin"></i>
+      <div class="row justify-components-around">
+        <div class="col-6">
+          <button type="button" @click="on_correct()">Corriger!</button>
+        </div>
+        <div class="col-6">
+          <font-awesome-icon icon="spinner" />
+        </div>
+    </div>
     </div>
     <div v-if="corrected && is_correct" class="text-success p-2">
-      <i class="fa fa-check"></i>
+      <font-awesome-icon icon="check" />
       Bien joué!
     </div>
     <div v-if="corrected && !is_correct" class="text-danger p-2">
-        <i class="fa fa-times"></i>
+        <font-awesome-icon icon="times" />
         La reponse est: {{correct_answer}}.
     </div>
 
