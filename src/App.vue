@@ -57,7 +57,7 @@
             </div>
           </div>
           <span v-if="n_tried === n_total">L'exercice est terminé {{name}},</span>
-          <span v-if="n_correct == n_total">vous etes un genie!</span>
+          <span v-if="n_correct == n_total">vous êtes un genie!</span>
           <span v-else-if="(n_correct > 0.5 * n_total) && n_tried === n_total">bien joué, mais il y a de l'espace pour amelioration!</span>
           <span v-else-if="(n_correct <= 0.5 * n_total) && n_tried === n_total">il faut pratiquer plus!</span>
 
