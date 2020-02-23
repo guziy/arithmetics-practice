@@ -149,9 +149,9 @@ export default {
 </script>
 
 <template id="equation">
-  <div class="row justify-content-left">
+  <div class="row justify-content-center">
 
-    <div class="col-8 p-1 text-nowrap">
+    <div class="p-1 mr-3 text-nowrap">
       <span v-for="token in tokens" v-bind:key="token">
         <span v-if="token === -1">
           <input size="4"  v-model.number="user_answer"
@@ -163,7 +163,7 @@ export default {
       </span>
     </div>
 
-    <div v-if="!corrected" class="col-4 p-1">
+    <div v-if="!corrected" class="p-1">
         <button type="button" @click="on_correct()" class="mr-2"><font-awesome-icon icon="check" /></button>
         <font-awesome-icon icon="spinner" />
     </div>
