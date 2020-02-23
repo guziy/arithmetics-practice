@@ -1,14 +1,9 @@
 <template>
   <div class="container m-3" id="app">
-    <div class="row justify-content-left m-3 p-3">
-      <div class="col-3">
-          SVP entrez votre nom:
-      </div>
-
-      <div class="col-3">
-        <input type="text" v-model="name"/>
-      </div>
-
+    <div class="row justify-content-center m-3 p-3">
+      <label for="player-name"> SVP entrez votre nom:
+          <input id="player-name" type="text" v-model="name"/>
+      </label>
     </div>
 
     <div class="row">
@@ -85,6 +80,7 @@ momentDurationFormatSetup(moment);
 
 
 export default {
+  title: 'Arithmetics practice',
   name: 'App',
   components: {
     equation

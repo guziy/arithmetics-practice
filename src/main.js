@@ -23,6 +23,12 @@ library.add(faStopwatch)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
+import VuePageTitle from 'vue-page-title'
+
+Vue.use(VuePageTitle, {
+  prefix: '',
+  // suffix: '- My App '
+})
 
 
 Vue.config.productionTip = false
