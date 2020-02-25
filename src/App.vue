@@ -1,6 +1,6 @@
 <template>
-  <div class="container m-3" id="app">
-    <div class="row justify-content-center m-3 p-3">
+  <div class="container m-2 pt-5" id="app">
+    <div class="row justify-content-center pt-5">
       <label for="player-name"> SVP entrez votre nom:
           <input id="player-name" type="text" v-model="name"/>
       </label>
