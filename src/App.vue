@@ -60,7 +60,7 @@
           </div>
         </div>
 
-        <div id="end-message" ref="end_message" class="col-12" v-if="n_tried >= 0">
+        <div id="footer" ref="end_message" class="col-12" v-if="n_tried >= 0">
           <div class="row justify-content-center">
 
             <div class="col-3 p-3">
@@ -75,11 +75,13 @@
               <span class="text-danger"><font-awesome-icon icon="times" class="mr-3"/>{{n_tried - n_correct}}</span>
             </div>
           </div>
-          <span v-if="n_tried === n_total">L'exercice est terminé {{name}}, ca vous a pris {{elapsed_time}}: </span>
-          <span v-if="n_correct == n_total">vous êtes un genie!</span>
-          <span v-else-if="(n_correct > 0.5 * n_total) && n_tried === n_total">bien joué, mais il y a de l'espace pour amelioration!</span>
-          <span v-else-if="(n_correct <= 0.5 * n_total) && n_tried === n_total">il faut pratiquer plus!</span>
 
+          <div id="end_message">
+            <span v-if="n_tried === n_total">L'exercice est terminé {{name}}, ca vous a pris {{elapsed_time}}: </span>
+            <span v-if="n_correct == n_total">vous êtes un genie!</span>
+            <span v-else-if="(n_correct > 0.5 * n_total) && n_tried === n_total">bien joué, mais il y a de l'espace pour amelioration!</span>
+            <span v-else-if="(n_correct <= 0.5 * n_total) && n_tried === n_total">il faut pratiquer plus!</span>
+          </div>
         </div>
 
       </div>
@@ -141,7 +143,13 @@ export default {
     on_focus_equation: function(event){
       if (event.src_index === this.n_total - 1) {
         clearInterval(this.timer_refresh_interval_id);
-        this.$refs.end_message.scrollIntoView();
+        this.$nextTick(
+          () => {
+            this.$refs.end_message.scrollIntoView({
+              behavior: 'smooth', block: 'end'
+            });
+          }
+        );
       }
     },
 
