@@ -23,7 +23,7 @@ export default {
     name: "equation",
 
     props:["equation_data", "event_bus",
-           'n_tried'],
+           "n_tried", "n_total"],
     data: function(){
       return equation_initial_state();
     },

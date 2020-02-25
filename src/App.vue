@@ -26,8 +26,8 @@
       </div>
     </div>
 -->
-      <div id=equation-container class="row m-5">
-        <div class="col-12 mb-3" v-if="n_tried >= 0">Entrez les nombres manquants:</div>
+      <div id="equation-container" class="row mt-5" v-if="n_tried >= 0">
+        <div class="col-12 mb-3">Entrez les nombres manquants:</div>
 
         <div class="col-12">
           <ul class="list-group">
@@ -36,10 +36,28 @@
 
               <equation :equation_data="eq" :event_bus="event_bus"
                         :n_tried="n_tried" @oncorrect-equation="on_correct"
+                        :n_total="n_total"
                         ></equation>
 
             </li>
           </ul>
+        </div>
+
+
+        <div class="col-12 mt-3 text-right">
+          <div class="p-2 ml-5">
+            <a href="#" class="badge badge-dark">{{n_tried}} / {{n_total}}</a>
+          </div>
+        </div>
+
+        <div class="col-12 mt-1">
+          <div class="progress" style="height: 3px;">
+            <div class="progress-bar" role="progressbar"
+                :aria-valuenow="progress" aria-valuemin="0"
+                :style="{width: progress + '%'} "
+                aria-valuemax="100">
+            </div>
+          </div>
         </div>
 
         <div id="end-message" ref="end_message" class="col-12" v-if="n_tried >= 0">
@@ -106,7 +124,8 @@ export default {
       elapsed_time: 0,
       current_time: "",
       event_bus: new Vue(),
-      timer_refresh_interval_id: -1
+      timer_refresh_interval_id: -1,
+      progress: 0,
     }
   },
   created: function(){
@@ -129,6 +148,7 @@ export default {
     on_correct: function (event){
       this.n_tried++;
       this.n_correct += event.correct;
+      this.progress = Math.floor(this.n_tried / this.n_total * 100);
     },
     //on commence btn action
     on_start: function(){
