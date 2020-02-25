@@ -171,7 +171,7 @@ export default {
       this.equation_data = [];
       this.n_tried = 0;
       this.n_correct = 0;
-
+      this.progress = Math.floor(this.n_tried / this.n_total * 100);
 
       const MAX_NUM = 100;
       var i;
