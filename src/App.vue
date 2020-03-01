@@ -6,8 +6,9 @@
 
     <div id="language-bar" class="container border rounded mb-5">
       <div class="p-2 text-right">
-        <a v-bind:class="['p-1', selected_language === 'fr' ? 'current-language' : '']" href="#" @click.prevent="on_change_language('fr')">Fr</a>
-        <a v-bind:class="['p-1',selected_language === 'en' ? 'current-language' : '']" href="#" @click.prevent="on_change_language('en')">En</a>
+        <a class="p-2 mr-3" href="http://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">{{$t('about')}}</a>
+        <a v-bind:class="['p-2', selected_language === 'fr' ? 'current-language' : '']" href="#" @click.prevent="on_change_language('fr')">Fr</a>
+        <a v-bind:class="['p-2',selected_language === 'en' ? 'current-language' : '']" href="#" @click.prevent="on_change_language('en')">En</a>
       </div>
     </div>
 
@@ -18,13 +19,13 @@
       </label>
     </div>
 
-    <div class="row">
+    <div class="row m-0">
       <div class="col text-center p-3">
           {{$t("hello")}} <b>{{name}}</b>, {{$t('lets_do_few_exercises')}}!
       </div>
     </div>
 
-    <div class="row">
+    <div class="row m-0">
       <div class="col text-center">
         <button type="button" name="button" @click="on_start">{{$t('yes_lets_start')}}</button>
       </div>
@@ -38,7 +39,7 @@
       </div>
     </div>
 -->
-      <div id="equation-container" class="row mt-5" v-if="n_tried >= 0">
+      <div id="equation-container" class="row m-0 mt-5" v-if="n_tried >= 0">
         <div class="col-12 mb-3">{{$t('enter_missing_numbers')}}:</div>
 
         <div class="col-12">
@@ -273,6 +274,7 @@ export default {
 
 #language-bar a{
   color: white;
+  font-weight: bold;
 }
 
 #language-bar a.current-language {

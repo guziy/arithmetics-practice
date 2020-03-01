@@ -15,7 +15,8 @@ const messages = {
          'you_are_a_genius': "vous êtes un genie",
          'well_played_but_there_is_space_for_improvement': "bien joué, mais il y a de l'espace pour amelioration",
          'you_have_to_practice_more': "il faut pratiquer plus",
-         'try_to_speed_up': "Essayez de faire les calculs plus vite"
+         'try_to_speed_up': "Essayez de faire les calculs plus vite",
+         'about': "À propos"
         },
   'en': {'hello': 'Hi',
          'pls_enter_your_name': 'Please enter your name',
@@ -29,7 +30,8 @@ const messages = {
          'you_are_a_genius': "you are a genius",
          'well_played_but_there_is_space_for_improvement': "well played, but there is still space for improvement",
          'you_have_to_practice_more': "you have to practice more",
-         'try_to_speed_up': "Try to speed up your calculations"
+         'try_to_speed_up': "Try to speed up your calculations",
+         'about': "About",
         }
 }
 
