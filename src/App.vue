@@ -1,20 +1,32 @@
 <template>
-  <div class="container m-2 pt-5" id="app">
-    <div class="row justify-content-center pt-5">
-      <label for="player-name"> SVP entrez votre nom:
+
+
+
+  <div class="container mt-0" id="app">
+
+    <div id="language-bar" class="container border rounded mb-5">
+      <div class="p-2 text-right">
+        <a v-bind:class="['p-1', selected_language === 'fr' ? 'current-language' : '']" href="#" @click.prevent="on_change_language('fr')">Fr</a>
+        <a v-bind:class="['p-1',selected_language === 'en' ? 'current-language' : '']" href="#" @click.prevent="on_change_language('en')">En</a>
+      </div>
+    </div>
+
+
+    <div class="row justify-content-center pt-3">
+      <label for="player-name"> {{$t('pls_enter_your_name')}}:
           <input id="player-name" type="text" v-model="name"/>
       </label>
     </div>
 
     <div class="row">
       <div class="col text-center p-3">
-          Salut <b>{{name}}</b>, faisons quelques exercices!
+          {{$t("hello")}} <b>{{name}}</b>, {{$t('lets_do_few_exercises')}}!
       </div>
     </div>
 
     <div class="row">
       <div class="col text-center">
-        <button type="button" name="button" @click="on_start">Oui, on commence</button>
+        <button type="button" name="button" @click="on_start">{{$t('yes_lets_start')}}</button>
       </div>
 
     </div>
@@ -27,7 +39,7 @@
     </div>
 -->
       <div id="equation-container" class="row mt-5" v-if="n_tried >= 0">
-        <div class="col-12 mb-3">Entrez les nombres manquants:</div>
+        <div class="col-12 mb-3">{{$t('enter_missing_numbers')}}:</div>
 
         <div class="col-12">
           <ul class="list-group">
@@ -64,7 +76,7 @@
           <div class="row justify-content-center">
 
             <div class="col-3 p-3">
-              <font-awesome-icon icon="stopwatch" class="mr-3"/> {{elapsed_time}}
+              <font-awesome-icon icon="stopwatch" class="mr-3"/> <br> {{elapsed_time}}
             </div>
 
             <div class="col-3 p-3">
@@ -76,11 +88,12 @@
             </div>
           </div>
 
-          <div id="end_message">
-            <span v-if="n_tried === n_total">L'exercice est terminé {{name}}, ca vous a pris {{elapsed_time}}: </span>
-            <span v-if="n_correct == n_total">vous êtes un genie!</span>
-            <span v-else-if="(n_correct > 0.5 * n_total) && n_tried === n_total">bien joué, mais il y a de l'espace pour amelioration!</span>
-            <span v-else-if="(n_correct <= 0.5 * n_total) && n_tried === n_total">il faut pratiquer plus!</span>
+          <div id="end_message" class="alert alert-success" v-if="n_tried === n_total">
+            <span> {{$t('exercise_is_finished')}} {{name}}, {{$t('it_took_you')}} {{elapsed_time}}: </span>
+            <span v-if="n_correct == n_total">{{$t('you_are_a_genius')}}!</span>
+            <span v-else-if="(n_correct > 0.5 * n_total)">{{$t('well_played_but_there_is_space_for_improvement')}}!</span>
+            <span v-else-if="(n_correct <= 0.5 * n_total)">{{$t('you_have_to_practice_more')}}!</span>
+            <span v-else-if="(elapsed_time_seconds > 1800)"><br>{{$t('try_to_speed_up')}}.</span>
           </div>
         </div>
 
@@ -95,6 +108,7 @@ import equation from './components/equation.vue'
 import Vue from 'vue'
 import moment from 'moment'
 import momentDurationFormatSetup from 'moment-duration-format'
+import {i18n} from '@/plugins/i18n';
 
 momentDurationFormatSetup(moment);
 
@@ -107,13 +121,6 @@ export default {
   },
   data: function (){
     return {
-      message: function(){
-        if (name.length === 0) {
-          return 'Entrez votre nom SVP:'
-        } else {
-          return "Salut <b>" + this.name + "</b>, on va faire quelques exercices:"
-        }
-      },
       name: "",
       n_total: 10,
 
@@ -124,10 +131,12 @@ export default {
       n_tried: -1,
       start_time: "",
       elapsed_time: 0,
+      elapsed_time_seconds: 0,
       current_time: "",
       event_bus: new Vue(),
       timer_refresh_interval_id: -1,
       progress: 0,
+      selected_language: i18n.locale
     }
   },
   created: function(){
@@ -172,7 +181,8 @@ export default {
     },
     get_elapsed_time: function(){
       let dt = moment.duration(this.get_current_time().diff(this.start_time));
-      this.elapsed_time = dt.format("mm [min] ss [sec]");
+      this.elapsed_time_seconds = dt;
+      this.elapsed_time = dt.format("hh [h] mm [min] ss [sec]");
       return this.elapsed_time;
     },
     generate_equation_data: function () {
@@ -223,6 +233,13 @@ export default {
           {triple: t, operation: operation, input_index: input_index, equation_index: i}
         );
       }
+  }, // generate_equation_data
+  on_change_language: function (selected_language){
+    if (selected_language === this.selected_language){
+      return;
+    }
+    this.selected_language = selected_language;
+    i18n.locale = selected_language;
   }
 }
 
@@ -249,5 +266,20 @@ export default {
   /* Apply 'spinner' keyframes looping once every second (1s)  */
   animation: spinner 1s linear infinite;
 }
+
+#language-bar{
+  color: white;
+  background-color: black;
+}
+
+#language-bar a{
+  color: white;
+}
+
+#language-bar a.current-language {
+  color: yellow;
+  background-color: grey;
+}
+
 
 </style>

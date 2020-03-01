@@ -169,11 +169,11 @@ export default {
     </div>
     <div v-if="corrected && is_correct" class="text-success p-2">
       <font-awesome-icon icon="check" />
-      Bien joué!
+      {{$t('well_played')}}!
     </div>
     <div v-if="corrected && !is_correct" class="text-danger p-2">
         <font-awesome-icon icon="times" />
-        La reponse est: {{correct_answer}}.
+        {{$t('the_answer_is')}}: {{correct_answer}}.
     </div>
 
   </div>
