@@ -12,7 +12,7 @@
     </div>
 
 
-    <div class="row justify-content-center pt-3">
+    <div class="row justify-content-center pt-3 m-0">
       <label for="player-name"> {{$t('pls_enter_your_name')}}:
           <input id="player-name" type="text" v-model="name"/>
       </label>
