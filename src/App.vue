@@ -277,7 +277,6 @@ export default {
 }
 
 #language-bar a.current-language {
-  color: yellow;
   background-color: grey;
 }
 
