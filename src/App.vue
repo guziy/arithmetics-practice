@@ -77,7 +77,7 @@
           <div class="row justify-content-center">
 
             <div class="col-3 p-3">
-              <font-awesome-icon icon="stopwatch" class="mr-3"/> <br> {{elapsed_time}}
+              <font-awesome-icon icon="stopwatch"/> <br> {{elapsed_time}}
             </div>
 
             <div class="col-3 p-3">
