@@ -185,7 +185,8 @@ export default {
         {{$t('the_answer_is')}}: {{correct_answer}}.
     </div>
 
+    <!--
     <div class="error" v-if="!$v.user_answer.integer">Field is required</div>
-
+    -->
   </div>
 </template>
