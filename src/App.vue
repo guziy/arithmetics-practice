@@ -76,16 +76,16 @@
         <div id="footer" ref="end_message" class="col-12" v-if="n_tried >= 0">
           <div class="row justify-content-center">
 
-            <div class="col-3 p-3">
-              <font-awesome-icon icon="stopwatch"/> <br> {{elapsed_time}}
+            <div class="col-6 p-3">
+              <font-awesome-icon icon="stopwatch"/> <br/> {{elapsed_time}}
             </div>
 
             <div class="col-3 p-3">
-              <span class="text-success"><font-awesome-icon icon="check" class="mr-3"/> {{n_correct}}</span>
+              <span class="text-success"><font-awesome-icon icon="check"/> <br/> {{n_correct}}</span>
             </div>
 
             <div class="col-3 p-3">
-              <span class="text-danger"><font-awesome-icon icon="times" class="mr-3"/>{{n_tried - n_correct}}</span>
+              <span class="text-danger"><font-awesome-icon icon="times"/> <br/>{{n_tried - n_correct}}</span>
             </div>
           </div>
 
