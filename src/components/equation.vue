@@ -17,6 +17,8 @@ function equation_initial_state() {
 }
 
 
+import { required, integer } from 'vuelidate/lib/validators'
+
 
 export default {
 
@@ -143,7 +145,14 @@ export default {
             this.init_equation();
         }
       },
+    },
+    validations: {
+        user_answer: {
+          required, integer
+        }
     }
+
+
 }
 
 </script>
@@ -175,6 +184,8 @@ export default {
         <font-awesome-icon icon="times" />
         {{$t('the_answer_is')}}: {{correct_answer}}.
     </div>
+
+    <div class="error" v-if="!$v.user_answer.integer">Field is required</div>
 
   </div>
 </template>

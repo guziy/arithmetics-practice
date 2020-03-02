@@ -19,7 +19,8 @@
     "popper.js": "^1.16.1",
     "vue": "^2.6.11",
     "vue-i18n": "^8.15.4",
-    "vue-page-title": "^1.1.6"
+    "vue-page-title": "^1.1.6",
+    "vuelidate": "^0.7.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.2.0",
