@@ -20,7 +20,7 @@ const messages = {
         },
   'en': {'hello': 'Hi',
          'pls_enter_your_name': 'Please enter your name',
-         'lets_do_few_exercises': "let's do few execises",
+         'lets_do_few_exercises': "let's do few exercises",
          'yes_lets_start': "Yes, start",
          'enter_missing_numbers': "Enter missing numbers",
          'well_played': 'Well played',
