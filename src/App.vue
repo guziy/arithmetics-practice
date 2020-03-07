@@ -15,7 +15,8 @@
 
     <div class="row justify-content-center pt-3 m-0">
       <label for="player-name"> {{$t('pls_enter_your_name')}}:
-          <input id="player-name" type="text" v-model="name"/>
+          <input id="player-name" type="text" v-model="name"
+                v-on:keyup.enter="$refs.start_button.focus()"/>
       </label>
     </div>
 
@@ -27,7 +28,7 @@
 
     <div class="row m-0">
       <div class="col text-center">
-        <button type="button" name="button" @click="on_start">{{$t('yes_lets_start')}}</button>
+        <button ref="start_button" type="button" name="button" @click="on_start">{{$t('yes_lets_start')}}</button>
       </div>
 
     </div>
