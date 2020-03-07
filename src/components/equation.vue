@@ -191,7 +191,8 @@ export default {
         {{$t('the_answer_is')}}: {{correct_answer}}.
     </div>
 
-    <div class="p-2 alert alert-danger" v-if="!$v.user_answer.integer">integer is required</div>
+    <div class="p-2 alert alert-danger"
+         v-if="!$v.user_answer.integer">{{$t('integer_is_required')}}!</div>
 
   </div>
 </template>

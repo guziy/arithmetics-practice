@@ -16,7 +16,8 @@ const messages = {
          'well_played_but_there_is_space_for_improvement': "bien joué, mais il y a de l'espace pour amelioration",
          'you_have_to_practice_more': "il faut pratiquer plus",
          'try_to_speed_up': "Essayez de faire les calculs plus vite",
-         'about': "À propos"
+         'about': "À propos",
+         'integer_is_required': "Un entier est requis"
         },
   'en': {'hello': 'Hi',
          'pls_enter_your_name': 'Please enter your name',
@@ -32,6 +33,7 @@ const messages = {
          'you_have_to_practice_more': "you have to practice more",
          'try_to_speed_up': "Try to speed up your calculations",
          'about': "About",
+         'integer_is_required': "An integer is required"
         }
 }
 
