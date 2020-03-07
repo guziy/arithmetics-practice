@@ -38,5 +38,7 @@ Vue.use(VuePageTitle, {
 Vue.config.productionTip = false
 
 new Vue({
-  i18n, render: h => h(App),
+  i18n,
+  render: h => h(App),
+  validations:{}
 }).$mount('#app')

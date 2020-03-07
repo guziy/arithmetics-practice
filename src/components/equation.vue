@@ -57,6 +57,12 @@ export default {
       on_correct: function (event) {
         //TODO: add action
 
+        if (this.$v.user_answer.$invalid) {
+          console.log(this.$v.user_answer);
+          return;
+        }
+
+
         if (this.user_answer === "") {
           console.log("Nothing was entered");
           return
@@ -127,7 +133,7 @@ export default {
         this.tokens = this.get_equation_tokens();
         this.visible = this.is_visible();
 
-        // ficus the input if required
+        // focus the input if required
         this.$nextTick(
           () => {
               if (this.is_visible()){
@@ -160,10 +166,10 @@ export default {
 <template id="equation">
   <div class="row justify-content-center">
 
-    <div class="p-1 mr-3 text-nowrap">
+    <div class="p-2 mr-3 text-nowrap">
       <span v-for="token in tokens" v-bind:key="token">
         <span v-if="token === -1">
-          <input size="4"  v-model.number="user_answer"
+          <input size="4"  v-model="$v.user_answer.$model"
                  v-on:keyup.enter="on_correct()" :disabled="corrected" ref="input"/>
         </span>
         <span v-else>
@@ -172,7 +178,7 @@ export default {
       </span>
     </div>
 
-    <div v-if="!corrected" class="p-1">
+    <div v-if="!corrected" class="p-2">
         <button type="button" @click="on_correct()" class="mr-2"><font-awesome-icon icon="check" /></button>
         <font-awesome-icon icon="spinner" />
     </div>
@@ -185,8 +191,7 @@ export default {
         {{$t('the_answer_is')}}: {{correct_answer}}.
     </div>
 
-    <!--
-    <div class="error" v-if="!$v.user_answer.integer">Field is required</div>
-    -->
+    <div class="p-2 alert alert-danger" v-if="!$v.user_answer.integer">integer is required</div>
+
   </div>
 </template>
