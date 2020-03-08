@@ -95,7 +95,7 @@
             <span v-if="n_correct == n_total">{{$t('you_are_a_genius')}}!</span>
             <span v-else-if="(n_correct > 0.5 * n_total)">{{$t('well_played_but_there_is_space_for_improvement')}}!</span>
             <span v-else-if="(n_correct <= 0.5 * n_total)">{{$t('you_have_to_practice_more')}}!</span>
-            <span v-else-if="(elapsed_time_seconds > 1800)"><br>{{$t('try_to_speed_up')}}.</span>
+            <span v-else-if="(elapsed_time_seconds > 180 * n_total)"><br>{{$t('try_to_speed_up')}}.</span>
           </div>
         </div>
 
