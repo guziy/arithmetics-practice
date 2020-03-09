@@ -170,7 +170,10 @@ export default {
       <span v-for="token in tokens" v-bind:key="token">
         <span v-if="token === -1">
           <input size="4"  v-model="$v.user_answer.$model"
-                 v-on:keyup.enter="on_correct()" :disabled="corrected" ref="input"/>
+                 v-on:keyup.enter="on_correct()"
+                 :disabled="corrected"
+                 :class="{'input': true, 'is-danger': $v.user_answer.$invalid}"
+                 ref="input"/>
         </span>
         <span v-else>
           {{token}}
