@@ -265,7 +265,7 @@ export default {
 /* This is the class name given by the Font Awesome component when icon contains 'spinner' */
 .fa-spinner {
   /* Apply 'spinner' keyframes looping once every second (1s)  */
-  animation: spinner 1s linear infinite;
+  animation: spinner 1.5s linear infinite;
 }
 
 #language-bar{

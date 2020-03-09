@@ -164,37 +164,40 @@ export default {
 </script>
 
 <template id="equation">
-  <div class="row justify-content-center input-group">
+  <form action="javascript:void(0);">
+  <div class="form-group row justify-content-center">
       <div class="text-nowrap p-2">
-        <span v-for="token in tokens" v-bind:key="token" class="mr-3">
-          <span v-if="token === -1">
+        <span v-for="token in tokens" v-bind:key="token">
+          <span v-if="token === -1" class="mr-3">
             <input size="4"  v-model="$v.user_answer.$model"
+                   type="text"
                    v-on:keyup.enter="on_correct()"
                    :disabled="corrected"
-                   :class="{'input': true, 'is-invalid': !$v.user_answer.integer, 'form-control-sm': true}"
+                   :class="{'input': true, 'is-invalid': !$v.user_answer.integer}"
                    ref="input"/>
           </span>
-          <span v-else>
+          <span v-else class="mr-3">
             {{token}}
           </span>
         </span>
       </div>
-      <div v-if="!corrected" class="p-2 input-group-append">
+      <div v-if="!corrected" class="p-2 my-auto">
           <button type="button" @click="on_correct()" class="mr-2"><font-awesome-icon icon="check" /></button>
           <font-awesome-icon icon="spinner" />
       </div>
-      <div v-if="corrected && is_correct" class="text-success p-2 input-group-append">
+      <div v-if="corrected && is_correct" class="text-success p-2 my-auto">
         <font-awesome-icon icon="check" class="mr-2" />
         {{$t('well_played')}}!
       </div>
-      <div v-if="corrected && !is_correct" class="text-danger p-2 input-group-append">
+      <div v-if="corrected && !is_correct" class="text-danger p-2 my-auto">
           <font-awesome-icon icon="times" />
           {{$t('the_answer_is')}}: {{correct_answer}}.
       </div>
 
-      <div class="p-2 alert alert-danger input-group-append"
+      <div class="p-2 mb-0 alert alert-danger"
            v-if="!$v.user_answer.integer">
            {{$t('integer_is_required')}}!
       </div>
   </div>
+</form>
 </template>
