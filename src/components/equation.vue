@@ -165,7 +165,7 @@ export default {
 
 <template id="equation">
   <form action="javascript:void(0);">
-  <div class="form-group row justify-content-center">
+  <div class="row justify-content-center">
       <div class="text-nowrap p-2">
         <span v-for="token in tokens" v-bind:key="token">
           <span v-if="token === -1" class="mr-3">

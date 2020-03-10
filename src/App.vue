@@ -44,7 +44,7 @@
         <div class="col-12 mb-3">{{$t('enter_missing_numbers')}}:</div>
 
         <div class="col-12">
-          <ul class="list-group list-group-flush">
+          <ul id="equation-list" class="list-group list-group-flush">
             <li class="list-group-item" v-for="eq in equation_data"
                 v-bind:key="eq.equation_index" v-show="eq.equation_index <= n_tried">
 
@@ -285,6 +285,7 @@ export default {
 #app button {
   color: #2c3e50;
 }
+
 
 
 </style>
