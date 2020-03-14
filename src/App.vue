@@ -45,7 +45,8 @@
 
         <div class="col-12">
           <ul id="equation-list" class="list-group list-group-flush">
-            <li class="list-group-item" v-for="eq in equation_data"
+            <li :class="['list-group-item', {'current-equation': eq.equation_index == n_tried}]"
+                v-for="eq in equation_data"
                 v-bind:key="eq.equation_index" v-show="eq.equation_index <= n_tried">
 
               <equation :equation_data="eq" :event_bus="event_bus"
@@ -58,7 +59,7 @@
         </div>
 
 
-        <div class="col-12 mt-3 text-right">
+        <div class="col-12 mt-0 text-right">
           <div class="p-2 ml-5">
             <a href="#" class="badge badge-dark">{{n_tried}} / {{n_total}}</a>
           </div>
@@ -284,6 +285,10 @@ export default {
 
 #app button {
   color: #2c3e50;
+}
+
+li.current-equation{
+  border-bottom: none;
 }
 
 

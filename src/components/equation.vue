@@ -168,7 +168,7 @@ export default {
   <div class="row justify-content-center">
       <div class="text-nowrap p-2">
         <span v-for="token in tokens" v-bind:key="token">
-          <span v-if="token === -1" class="mr-3">
+          <span v-if="token === -1" class="mr-1">
             <input size="4"  v-model="$v.user_answer.$model"
                    type="text"
                    v-on:keyup.enter="on_correct()"
@@ -176,7 +176,7 @@ export default {
                    :class="{'input': true, 'is-invalid': !$v.user_answer.integer}"
                    ref="input"/>
           </span>
-          <span v-else class="mr-3">
+          <span v-else class="mr-1">
             {{token}}
           </span>
         </span>
