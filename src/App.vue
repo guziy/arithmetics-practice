@@ -60,12 +60,12 @@
 
 
         <div class="col-12 mt-0 text-right">
-          <div class="p-2 ml-5">
+          <div class="p-1 ml-5">
             <a href="#" class="badge badge-dark">{{n_tried}} / {{n_total}}</a>
           </div>
         </div>
 
-        <div class="col-12 mt-1">
+        <div class="col-12 mt-0">
           <div class="progress" style="height: 3px;">
             <div class="progress-bar" role="progressbar"
                 :aria-valuenow="progress" aria-valuemin="0"
