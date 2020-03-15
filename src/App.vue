@@ -47,7 +47,7 @@
           <ul id="equation-list" class="list-group list-group-flush">
             <li :class="['list-group-item', {'current-equation': eq.equation_index == n_tried}]"
                 v-for="eq in equation_data"
-                v-bind:key="eq.equation_index" v-show="eq.equation_index <= n_tried">
+                :key="eq.equation_index" v-show="eq.equation_index <= n_tried">
 
               <equation :equation_data="eq" :event_bus="event_bus"
                         :n_tried="n_tried" @oncorrect-equation="on_correct"
@@ -154,6 +154,7 @@ export default {
 
     on_focus_equation: function(event){
       if (event.src_index === this.n_total - 1) {
+        console.log(event.src_index)
         clearInterval(this.timer_refresh_interval_id);
         this.$nextTick(
           () => {
@@ -174,6 +175,12 @@ export default {
     on_start: function(){
       this.start_time = moment();
       this.elapsed_time = this.get_elapsed_time();
+
+      if (this.timer_refresh_interval_id !== -1) {
+        clearInterval(this.timer_refresh_interval_id);
+        this.timer_refresh_interval_id = -1;
+      }
+
       this.timer_refresh_interval_id = setInterval(this.get_elapsed_time, 1000);
       this.generate_equation_data();
 
