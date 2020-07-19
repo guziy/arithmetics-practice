@@ -22,7 +22,9 @@
 
     <div class="row m-0">
       <div class="col text-center p-3">
-          {{$t("hello")}} <b>{{name}}</b>, {{$t('lets_do_few_exercises')}}!
+          {{$t("hello")}} <b>{{name}}</b>, {{$t('lets_do_few')}}
+          <input id="num-equations" type="number" v-model.number="n_total" min="1" max="1000"/>
+          {{$t('exercises')}}!
       </div>
     </div>
 
@@ -183,8 +185,7 @@ export default {
 
       this.timer_refresh_interval_id = setInterval(this.get_elapsed_time, 1000);
       this.generate_equation_data();
-
-
+      this.n_tried = 0;
     },
     get_current_time: function (){
       return moment();
@@ -197,7 +198,7 @@ export default {
     },
     generate_equation_data: function () {
       this.equation_data = [];
-      this.n_tried = 0;
+      this.n_tried = -1;
       this.n_correct = 0;
       this.progress = Math.floor(this.n_tried / this.n_total * 100);
 
@@ -243,15 +244,22 @@ export default {
           {triple: t, operation: operation, input_index: input_index, equation_index: i}
         );
       }
-  }, // generate_equation_data
-  on_change_language: function (selected_language){
-    if (selected_language === this.selected_language){
-      return;
+    }, // generate_equation_data
+    on_change_language: function (selected_language){
+      if (selected_language === this.selected_language){
+        return;
+      }
+      this.selected_language = selected_language;
+      i18n.locale = selected_language;
+    },
+  },
+  watch: {
+    n_total: function (newVal, oldVal){
+      if (newVal != oldVal) {
+          this.n_tried = -1;
+      }
     }
-    this.selected_language = selected_language;
-    i18n.locale = selected_language;
   }
-}
 
 
 }
