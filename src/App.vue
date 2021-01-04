@@ -13,6 +13,11 @@
     </div>
 
 
+    <div id="error_message" class="alert alert-error" v-if="error_message != '' ">
+      {{error_message}}
+    </div>
+
+
     <div class="row justify-content-center pt-3 m-0">
       <label for="player-name"> {{$t('pls_enter_your_name')}}:
           <input id="player-name" type="text" v-model="name"
@@ -23,8 +28,72 @@
     <div class="row m-0">
       <div class="col text-center p-3">
           {{$t("hello")}} <b>{{name}}</b>, {{$t('lets_do_few')}}
-          <input id="num-equations" type="number" v-model.number="n_total" min="1" max="1000"/>
+          <input id="num-equations"
+                 type="number"
+                 v-model.number="n_total" min="1" max="1000"/>
           {{$t('exercises')}}!
+      </div>
+
+      <div class="col text-left m-3">
+        <u>Choisis les opérations:</u>
+        <fieldset>
+
+          <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                checked
+                id="addition_opt"
+              />
+
+              <label class="form-check-label" for="addition_opt">
+                Addition
+              </label>
+         </div>
+
+         <div class="form-check">
+             <input
+               class="form-check-input"
+               type="checkbox"
+               value=""
+               id="subtraction_opt"
+               checked
+             />
+
+             <label class="form-check-label" for="subtraction_opt">
+               Soustraction
+             </label>
+        </div>
+
+        <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="multiplication_opt"
+            />
+
+            <label class="form-check-label" for="multiplication_opt">
+              Mutliplication
+            </label>
+       </div>
+
+       <div class="form-check">
+           <input
+             class="form-check-input"
+             type="checkbox"
+             value=""
+             id="multiplication_opt"
+           />
+
+           <label class="form-check-label" for="multiplication_opt">
+             Division
+           </label>
+      </div>
+      </fieldset>
+
+
       </div>
     </div>
 
@@ -99,6 +168,13 @@
             <span v-else-if="(n_correct > 0.5 * n_total)">{{$t('well_played_but_there_is_space_for_improvement')}}!</span>
             <span v-else-if="(n_correct <= 0.5 * n_total)">{{$t('you_have_to_practice_more')}}!</span>
             <span v-else-if="(elapsed_time_seconds > 180 * n_total)"><br>{{$t('try_to_speed_up')}}.</span>
+
+
+            <div class="row" v-if="n_correct == n_total">
+              <div class="col m-3">
+                <img src="https://media.giphy.com/media/h1zypyYAgZE96sCNuV/giphy.gif" height="200px"/>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -126,6 +202,7 @@ export default {
   },
   data: function (){
     return {
+      MAX_NUM_EQUATIONS: 100,
       name: "",
       n_total: 10,
 
@@ -141,7 +218,8 @@ export default {
       event_bus: new Vue(),
       timer_refresh_interval_id: -1,
       progress: 0,
-      selected_language: i18n.locale
+      selected_language: i18n.locale,
+      error_message: ""
     }
   },
   created: function(){
@@ -258,6 +336,11 @@ export default {
       if (newVal != oldVal) {
           this.n_tried = -1;
       }
+
+      if (newVal > this.MAX_NUM_EQUATIONS) {
+        this.error_message = "Too many equations requested, resetting to " + this.MAX_NUM_EQUATIONS;
+      }
+
     }
   }
 
