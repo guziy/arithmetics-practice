@@ -172,11 +172,11 @@ export default {
 
 <template id="equation">
   <form action="javascript:void(0);">
-  <div class="row justify-content-center p-2">
-      <div class="col my-auto text-right text-nowrap">
+  <div class="row justify-content-center">
+      <div class="col-md my-auto text-left text-nowrap pt-2 pb-2">
         <span v-for="(token, i) in tokens"
               v-bind:key="i + '-eq_term of eq-' + equation_data.equation_index">
-          <span v-if="token === -1" class="mr-1">
+          <span v-if="token === -1" class="mr-2">
             <input size="4"  v-model="$v.user_answer.$model"
                    type="text"
                    v-on:keyup.enter="on_correct()"
@@ -184,28 +184,28 @@ export default {
                    :class="{'input': true, 'is-invalid': !$v.user_answer.integer}"
                    ref="input"/>
           </span>
-          <span v-else class="mr-1">
+          <span v-else class="mr-2">
             {{token}}
           </span>
         </span>
       </div>
-      <div v-if="!corrected" class="col my-auto text-left">
+      <div v-if="!corrected" class="col-md-auto my-auto text-left text-nowrap">
           <button type="button"
                   @click="on_correct()"
                   class="btn btn-sm btn-secondary mr-2"><font-awesome-icon
                   icon="check" /></button>
           <font-awesome-icon icon="spinner" />
       </div>
-      <div v-if="corrected && is_correct" class="text-success col my-auto text-left">
+      <div v-if="corrected && is_correct" class="text-success col-md-auto my-auto text-left">
         <font-awesome-icon icon="check" class="" />
         {{$t('well_played')}}!
       </div>
-      <div v-if="corrected && !is_correct" class="text-danger col my-auto text-left">
+      <div v-if="corrected && !is_correct" class="text-danger col-md-auto my-auto text-left">
           <font-awesome-icon icon="times" />
           {{$t('the_answer_is')}}: {{correct_answer}}.
       </div>
 
-      <div class="col alert alert-danger my-auto text-left m-0"
+      <div class="col-md alert alert-danger my-auto text-left m-0"
            v-if="!$v.user_answer.integer">
            {{$t('integer_is_required')}}!
       </div>

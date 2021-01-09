@@ -18,15 +18,17 @@
     </div>
 
 
-    <div class="row justify-content-center pt-3 m-0">
-      <label for="player-name"> {{$t('pls_enter_your_name')}}:
-          <input id="player-name" type="text" v-model="name"
-                v-on:keyup.enter="$refs.start_button.focus()"/>
-      </label>
+    <div class="row justify-content-center p-3 m-0 mb-3">
+      <div class="col">
+        <label for="player-name"> {{$t('pls_enter_your_name')}}:
+            <input id="player-name" type="text" v-model="name"
+                  v-on:keyup.enter="$refs.start_button.focus()"/>
+        </label>
+      </div>
     </div>
 
-    <div class="row m-0">
-      <div class="col text-center p-3">
+    <div class="row justify-content-center m-0 pb-3 mb-3 border border-success rounded">
+      <div class="col text-center m-0 mt-3 my-auto">
           {{$t("hello")}} <b>{{name}}</b>, {{$t('lets_do_few')}}
           <input id="num-equations"
                  v-model="$v.n_total.$model"
@@ -37,8 +39,8 @@
           {{$t('exercises')}}!
       </div>
 
-      <div class="col text-left m-3">
-        <u>Choisis les opérations:</u>
+      <div class="col text-left mt-3 ml-2 pl-3 p-0 m-0 border-left">
+        <p>Choisis les opérations:</p>
         <fieldset>
 
           <div class="form-check">
@@ -51,23 +53,9 @@
               />
 
               <label class="form-check-label" for="addition_opt">
-                Addition
+                Addition / Soustraction
               </label>
          </div>
-
-         <div class="form-check">
-             <input
-               class="form-check-input"
-               type="checkbox"
-               value=""
-               id="subtraction_opt"
-               checked
-             />
-
-             <label class="form-check-label" for="subtraction_opt">
-               Soustraction
-             </label>
-        </div>
 
         <div class="form-check">
             <input
@@ -78,22 +66,10 @@
             />
 
             <label class="form-check-label" for="multiplication_opt">
-              Mutliplication
+              Mutliplication / Division
             </label>
        </div>
 
-       <div class="form-check">
-           <input
-             class="form-check-input"
-             type="checkbox"
-             value=""
-             id="multiplication_opt"
-           />
-
-           <label class="form-check-label" for="multiplication_opt">
-             Division
-           </label>
-      </div>
       </fieldset>
 
 
