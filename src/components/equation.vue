@@ -42,6 +42,7 @@ export default {
           this.$nextTick(
             () => {
                 if (this.is_visible()){
+                    console.log("Focusing on:" + this.$refs.input[0] + ", from " + event.src_index);
                     this.$refs.input[0].focus();
                     this.$refs.input[0].scrollIntoView();
                 }
@@ -52,7 +53,9 @@ export default {
 
     mounted: function () {
     },
-
+    beforeDestroy(){
+      this.event_bus.$off("focus-equation");
+    },
     methods: {
       on_correct: function (event) {
         //TODO: add action
@@ -76,7 +79,11 @@ export default {
         };
 
         this.$emit("oncorrect-equation", event);
-        this.event_bus.$emit("focus-equation", {src_index: this.equation_data.equation_index});
+
+        // focus on the next equation
+        this.event_bus.$emit("focus-equation",
+                               {src_index: this.equation_data.equation_index});
+
         this.corrected = true;
       },
       is_visible: function() {
@@ -165,9 +172,10 @@ export default {
 
 <template id="equation">
   <form action="javascript:void(0);">
-  <div class="row justify-content-center">
-      <div class="text-nowrap p-2">
-        <span v-for="token in tokens" v-bind:key="token">
+  <div class="row justify-content-center p-2">
+      <div class="col my-auto text-right text-nowrap">
+        <span v-for="(token, i) in tokens"
+              v-bind:key="i + '-eq_term of eq-' + equation_data.equation_index">
           <span v-if="token === -1" class="mr-1">
             <input size="4"  v-model="$v.user_answer.$model"
                    type="text"
@@ -181,20 +189,23 @@ export default {
           </span>
         </span>
       </div>
-      <div v-if="!corrected" class="p-2 my-auto">
-          <button type="button" @click="on_correct()" class="mr-2"><font-awesome-icon icon="check" /></button>
+      <div v-if="!corrected" class="col my-auto text-left">
+          <button type="button"
+                  @click="on_correct()"
+                  class="btn btn-sm btn-secondary mr-2"><font-awesome-icon
+                  icon="check" /></button>
           <font-awesome-icon icon="spinner" />
       </div>
-      <div v-if="corrected && is_correct" class="text-success p-2 my-auto">
-        <font-awesome-icon icon="check" class="mr-2" />
+      <div v-if="corrected && is_correct" class="text-success col my-auto text-left">
+        <font-awesome-icon icon="check" class="" />
         {{$t('well_played')}}!
       </div>
-      <div v-if="corrected && !is_correct" class="text-danger p-2 my-auto">
+      <div v-if="corrected && !is_correct" class="text-danger col my-auto text-left">
           <font-awesome-icon icon="times" />
           {{$t('the_answer_is')}}: {{correct_answer}}.
       </div>
 
-      <div class="p-2 mb-0 alert alert-danger"
+      <div class="col alert alert-danger my-auto text-left m-0"
            v-if="!$v.user_answer.integer">
            {{$t('integer_is_required')}}!
       </div>

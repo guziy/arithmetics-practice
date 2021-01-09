@@ -13,7 +13,7 @@
     </div>
 
 
-    <div id="error_message" class="alert alert-error" v-if="error_message != '' ">
+    <div id="error_message" class="alert alert-danger" v-if="error_message != '' ">
       {{error_message}}
     </div>
 
@@ -29,8 +29,11 @@
       <div class="col text-center p-3">
           {{$t("hello")}} <b>{{name}}</b>, {{$t('lets_do_few')}}
           <input id="num-equations"
-                 type="number"
-                 v-model.number="n_total" min="1" max="1000"/>
+                 v-model="$v.n_total.$model"
+                 v-on:keyup="on_edit_n_total()"
+                 size="4"
+                 :disabled="(n_tried >= 0) && false"
+                 :class="{'input': true, 'is-invalid': !($v.n_total.integer && $v.n_total.required && $v.n_total.between) }"/>
           {{$t('exercises')}}!
       </div>
 
@@ -99,7 +102,12 @@
 
     <div class="row m-0">
       <div class="col text-center">
-        <button ref="start_button" type="button" name="button" @click="on_start">{{$t('yes_lets_start')}}</button>
+        <button ref="start_button"
+                class="btn btn-success"
+                type="button"
+                name="button"
+                :disabled="!is_ok_to_start()"
+                @click="on_start">{{$t('yes_lets_start')}}</button>
       </div>
 
     </div>
@@ -118,7 +126,7 @@
           <ul id="equation-list" class="list-group list-group-flush">
             <li :class="['list-group-item', {'current-equation': eq.equation_index == n_tried}]"
                 v-for="eq in equation_data"
-                :key="eq.equation_index" v-show="eq.equation_index <= n_tried">
+                :key="eq.equation_index + 'A'" v-show="eq.equation_index <= n_tried">
 
               <equation :equation_data="eq" :event_bus="event_bus"
                         :n_tried="n_tried" @oncorrect-equation="on_correct"
@@ -193,6 +201,8 @@ import {i18n} from '@/plugins/i18n';
 
 momentDurationFormatSetup(moment);
 
+import { required, integer, between } from 'vuelidate/lib/validators'
+
 
 export default {
   title: 'Arithmetics practice',
@@ -202,7 +212,7 @@ export default {
   },
   data: function (){
     return {
-      MAX_NUM_EQUATIONS: 100,
+      MAX_NUM_EQUATIONS: 500,
       name: "",
       n_total: 10,
 
@@ -235,7 +245,7 @@ export default {
     on_focus_equation: function(event){
       if (event.src_index === this.n_total - 1) {
         console.log(event.src_index)
-        clearInterval(this.timer_refresh_interval_id);
+
         this.$nextTick(
           () => {
             this.$refs.end_message.scrollIntoView({
@@ -250,9 +260,16 @@ export default {
       this.n_tried++;
       this.n_correct += event.correct;
       this.progress = Math.floor(this.n_tried / this.n_total * 100);
+
+      if (this.n_tried === this.n_total){
+        clearInterval(this.timer_refresh_interval_id);
+      }
+
     },
     //on commence btn action
     on_start: function(){
+
+
       this.start_time = moment();
       this.elapsed_time = this.get_elapsed_time();
 
@@ -262,8 +279,11 @@ export default {
       }
 
       this.timer_refresh_interval_id = setInterval(this.get_elapsed_time, 1000);
+
       this.generate_equation_data();
       this.n_tried = 0;
+      this.progress = 0; // reset the progress bar
+
     },
     get_current_time: function (){
       return moment();
@@ -278,7 +298,7 @@ export default {
       this.equation_data = [];
       this.n_tried = -1;
       this.n_correct = 0;
-      this.progress = Math.floor(this.n_tried / this.n_total * 100);
+      //this.progress = Math.floor(this.n_tried / this.n_total * 100);
 
       const MAX_NUM = 100;
       var i;
@@ -330,19 +350,32 @@ export default {
       this.selected_language = selected_language;
       i18n.locale = selected_language;
     },
+    on_edit_n_total: function (){
+      if (this.$v.n_total.$invalid) {
+        var msg = "Please fix the number of exercises: should be integer between 1 and " + this.MAX_NUM_EQUATIONS;
+        this.error_message = msg;
+      } else {
+        this.error_message = "";
+        this.n_total = Number(this.$v.n_total.$model);
+        this.n_tried = -1;
+      }
+    },
+    is_ok_to_start: function(){
+      return this.error_message.length === 0;
+    }
+
   },
-  watch: {
-    n_total: function (newVal, oldVal){
-      if (newVal != oldVal) {
-          this.n_tried = -1;
+  validations() {
+    return {
+      n_total: {
+        required,
+        integer,
+        between: between(1, this.MAX_NUM_EQUATIONS)
       }
-
-      if (newVal > this.MAX_NUM_EQUATIONS) {
-        this.error_message = "Too many equations requested, resetting to " + this.MAX_NUM_EQUATIONS;
-      }
-
     }
   }
+
+
 
 
 }
@@ -381,9 +414,6 @@ export default {
   background-color: grey;
 }
 
-#app button {
-  color: #2c3e50;
-}
 
 li.current-equation{
   border-bottom: none;
