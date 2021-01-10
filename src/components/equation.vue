@@ -173,7 +173,7 @@ export default {
 <template id="equation">
   <form action="javascript:void(0);">
   <div class="row justify-content-center">
-      <div class="col-md my-auto text-left text-nowrap pt-2 pb-2">
+      <div class="col-md-auto my-auto text-left text-nowrap pt-2 pb-2">
         <span v-for="(token, i) in tokens"
               v-bind:key="i + '-eq_term of eq-' + equation_data.equation_index">
           <span v-if="token === -1" class="mr-2">

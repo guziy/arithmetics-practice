@@ -13,8 +13,13 @@
     </div>
 
 
-    <div id="error_message" class="alert alert-danger" v-if="error_message != '' ">
-      {{error_message}}
+    <div id="error_message"  v-if="error_message_list.length > 0" class="list-group">
+        <a v-for="(msg_part, msg_indx) in error_message_list"
+            v-bind:key="msg_indx + '-error-message'"
+            class="list-group-item-danger" href="#">
+          {{msg_part}}, {{msg_indx}}
+        </a>
+
     </div>
 
 
@@ -35,43 +40,29 @@
                  v-on:keyup="on_edit_n_total()"
                  size="4"
                  :disabled="(n_tried >= 0) && false"
-                 :class="{'input': true, 'is-invalid': !($v.n_total.integer && $v.n_total.required && $v.n_total.between) }"/>
+                 :class="{'input': true, 'is-invalid': $v.n_total.$invalid }"/>
           {{$t('exercises')}}!
       </div>
 
       <div class="col text-left mt-3 ml-2 pl-3 p-0 m-0 border-left">
         <p>Choisis les opérations:</p>
-        <fieldset>
 
-          <div class="form-check">
+          <div v-for="(operation, opid) in all_operations_text_labels"
+               class="form-check" v-bind:key="operation">
+
               <input
                 class="form-check-input"
                 type="checkbox"
-                value=""
-                checked
-                id="addition_opt"
+                :value=opid
+                v-model="selected_operations[opid]"
+                :id="opid + '_opt'"
+                @change="on_change_operations($event)"
               />
 
-              <label class="form-check-label" for="addition_opt">
-                Addition / Soustraction
+              <label class="form-check-label" :for="opid + '_opt'">
+                {{operation}}
               </label>
          </div>
-
-        <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              id="multiplication_opt"
-            />
-
-            <label class="form-check-label" for="multiplication_opt">
-              Mutliplication / Division
-            </label>
-       </div>
-
-      </fieldset>
-
 
       </div>
     </div>
@@ -191,6 +182,17 @@ export default {
       MAX_NUM_EQUATIONS: 500,
       name: "",
       n_total: 10,
+      num_upper_limit_list: [100, 500, 1000, 10000],
+      all_operations_text_labels: { // operation to text label map
+        "add": "Addition",
+        "sub": "Subtraction",
+        "mul": "Multiplication",
+        "div": "Division"
+      },
+      all_operations_symbols: {
+        "add": "+", "sub": "-", "mul": "\u00D7", "div": "\u00F7"
+      },
+      selected_operations: {"add": true, "sub": true, "mul": false, "div": false},
 
       equation_data: [],
 
@@ -205,7 +207,8 @@ export default {
       timer_refresh_interval_id: -1,
       progress: 0,
       selected_language: i18n.locale,
-      error_message: ""
+      error_message_list: [],
+
     }
   },
   created: function(){
@@ -318,6 +321,10 @@ export default {
           {triple: t, operation: operation, input_index: input_index, equation_index: i}
         );
       }
+
+
+
+
     }, // generate_equation_data
     on_change_language: function (selected_language){
       if (selected_language === this.selected_language){
@@ -329,15 +336,45 @@ export default {
     on_edit_n_total: function (){
       if (this.$v.n_total.$invalid) {
         var msg = "Please fix the number of exercises: should be integer between 1 and " + this.MAX_NUM_EQUATIONS;
-        this.error_message = msg;
+        this.push_error(msg);
       } else {
-        this.error_message = "";
+        this.pop_error(msg);
         this.n_total = Number(this.$v.n_total.$model);
         this.n_tried = -1;
       }
     },
     is_ok_to_start: function(){
-      return this.error_message.length === 0;
+      return this.error_message_list.length === 0;
+    },
+    on_change_operations: function(){
+      // needed for error checking
+      var any_selected = false;
+      Object.values(this.selected_operations).forEach( (value) => {
+        any_selected = any_selected || value;
+      });
+
+      var msg = "You need to select at least one operation!";
+      if (!any_selected) {
+        this.push_error(msg);
+        this.n_tried = -1;
+      } else {
+        this.pop_error(msg);
+      }
+    },
+    push_error: function(msg) {
+      if (!this.error_message_list.includes(msg)){
+        this.error_message_list.push(msg);
+      }
+    },
+    pop_error: function(msg) {
+      var indx = this.error_message_list.indexOf(msg);
+
+      console.log(this.error_message_list);
+      console.log("indx = " + indx)
+
+      if (indx !== -1) {
+          this.error_message_list.splice(indx);
+      }
     }
 
   },
