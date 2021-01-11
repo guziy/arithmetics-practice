@@ -13,14 +13,6 @@
     </div>
 
 
-    <div id="error_message"  v-if="error_message_list.length > 0" class="list-group">
-        <a v-for="(msg_part, msg_indx) in error_message_list"
-            v-bind:key="msg_indx + '-error-message'"
-            class="list-group-item-danger" href="#">
-          {{msg_part}}, {{msg_indx}}
-        </a>
-
-    </div>
 
 
     <div class="row justify-content-center p-3 m-0 mb-3">
@@ -32,7 +24,7 @@
       </div>
     </div>
 
-    <div class="row justify-content-center m-0 pb-3 mb-3 border border-success rounded">
+    <div class="row justify-content-center m-0 pb-3 mb-3 border border-dark rounded">
       <div class="col text-center m-0 mt-3 my-auto">
           {{$t("hello")}} <b>{{name}}</b>, {{$t('lets_do_few')}}
           <input id="num-equations"
@@ -67,6 +59,18 @@
       </div>
     </div>
 
+
+    <!-- error messages -->
+    <div id="error_message"  v-if="!is_ok_to_start()" class="list-group mt-2 mb-2">
+        <a v-for="(msg_part, msg_indx) in error_message_list"
+            v-bind:key="msg_indx + '-error-message'"
+            class="list-group-item-warning" href="#">
+          {{msg_part}}
+        </a>
+
+    </div>
+
+
     <div class="row m-0">
       <div class="col text-center">
         <button ref="start_button"
@@ -78,6 +82,8 @@
       </div>
 
     </div>
+
+
 
 <!--
     <div v-if="start_time != ''" class="row">
@@ -208,7 +214,8 @@ export default {
       progress: 0,
       selected_language: i18n.locale,
       error_message_list: [],
-
+      ERRID_NTOTAL_FIELD: 0,
+      ERRID_OPS_SELECT: 1
     }
   },
   created: function(){
@@ -282,48 +289,59 @@ export default {
       const MAX_NUM = 100;
       var i;
       var num1, num2, num3;
-      var additon;
       var r; // from [0, 1)
+
+
+      var cur_operations = [];
+
+      for (const [key, status] of Object.entries(this.selected_operations)){
+        if (status) {
+          cur_operations.push(key);
+        }
+      }
+
+      console.log(cur_operations);
+
+      var operation;
+
       for (i = 0; i < this.n_total; i++) {
         //console.log(i);
 
         r = Math.random();
 
-        additon = r < 0.5;
-
         num1 = Math.floor(r * MAX_NUM);
-
         num2 = Math.floor(r * num1);
 
-        if (num1 < 10){
-          num1 += 13;
-          num2 += 8;
-        }
+        operation = cur_operations[Math.floor(r * cur_operations.length)];
 
-        if (num1 + num2 > MAX_NUM) {
-          additon = false;
-        }
-
-        var operation;
-        if (additon){
+        if (operation === "add") {
           num3 = num1 + num2;
-          operation = "+";
-        } else {
+        } else if (operation === "sub") {
           num3 = num1 - num2;
-          operation = "-";
+        } else if (operation === "mul") {
+          num3 = num1 * num2;
+        } else if (operation === "div") {
+          num3 = Math.floor(num1 / num2);
         }
+
+
 
         var input_index;
         input_index = Math.floor(3 * Math.random());
         let t = [num1, num2, num3];
+        let correct_answer = t[input_index];
         t[input_index] = -1;
         this.equation_data.push(
-          {triple: t, operation: operation, input_index: input_index, equation_index: i}
+          {
+            triple: t,
+            operation_symbol: this.all_operations_symbols[operation],
+            operation: operation,
+            input_index: input_index,
+            equation_index: i,
+            correct_answer: correct_answer
+          }
         );
       }
-
-
-
 
     }, // generate_equation_data
     on_change_language: function (selected_language){
@@ -334,17 +352,18 @@ export default {
       i18n.locale = selected_language;
     },
     on_edit_n_total: function (){
+      var msg = "Please fix the number of exercises: should be integer between 1 and " + this.MAX_NUM_EQUATIONS;
       if (this.$v.n_total.$invalid) {
-        var msg = "Please fix the number of exercises: should be integer between 1 and " + this.MAX_NUM_EQUATIONS;
-        this.push_error(msg);
+        this.push_error(msg, this.ERRID_NTOTAL_FIELD);
       } else {
-        this.pop_error(msg);
+        this.pop_error(msg, this.ERRID_NTOTAL_FIELD);
         this.n_total = Number(this.$v.n_total.$model);
-        this.n_tried = -1;
       }
+      this.n_tried = -1;
     },
     is_ok_to_start: function(){
-      return this.error_message_list.length === 0;
+      // assume that the initial settings are valid
+      return this.error_message_list.reduce((acc, item) => acc && (item.length === 0), true);
     },
     on_change_operations: function(){
       // needed for error checking
@@ -355,26 +374,17 @@ export default {
 
       var msg = "You need to select at least one operation!";
       if (!any_selected) {
-        this.push_error(msg);
-        this.n_tried = -1;
+        this.push_error(msg, this.ERRID_OPS_SELECT);
       } else {
-        this.pop_error(msg);
+        this.pop_error(msg, this.ERRID_OPS_SELECT);
       }
+      this.n_tried = -1;
     },
-    push_error: function(msg) {
-      if (!this.error_message_list.includes(msg)){
-        this.error_message_list.push(msg);
-      }
+    push_error: function(msg, idx) {
+      this.error_message_list[idx] = msg;
     },
-    pop_error: function(msg) {
-      var indx = this.error_message_list.indexOf(msg);
-
-      console.log(this.error_message_list);
-      console.log("indx = " + indx)
-
-      if (indx !== -1) {
-          this.error_message_list.splice(indx);
-      }
+    pop_error: function(msg, idx) {
+      this.error_message_list[idx] = "";
     }
 
   },
