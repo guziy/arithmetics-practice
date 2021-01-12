@@ -150,7 +150,7 @@ export default {
                    type="text"
                    v-on:keyup.enter="on_correct()"
                    :disabled="corrected"
-                   :class="{'input': true, 'is-invalid': !$v.user_answer.integer}"
+                   :class="{'input': true, 'is-invalid': $v.user_answer.$invalid}"
                    ref="input"/>
           </span>
           <span v-else class="mr-2">
@@ -174,7 +174,7 @@ export default {
           {{$t('the_answer_is')}}: {{correct_answer}}.
       </div>
 
-      <div class="col-md alert alert-danger my-auto text-left m-0"
+      <div class="col-md-auto alert alert-danger my-auto text-left m-0"
            v-if="!$v.user_answer.integer">
            {{$t('integer_is_required')}}!
       </div>

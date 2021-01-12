@@ -26,21 +26,34 @@
 
     <div class="row justify-content-center m-0 pb-3 mb-3 border border-dark rounded">
       <div class="col text-center m-0 mt-3 my-auto">
+
           {{$t("hello")}} <b>{{name}}</b>, {{$t('lets_do_few')}}
+
           <input id="num-equations"
                  v-model="$v.n_total.$model"
-                 v-on:keyup="on_edit_n_total()"
                  size="4"
+                 v-on:keyup="on_edit_n_total()"
                  :disabled="(n_tried >= 0) && false"
-                 :class="{'input': true, 'is-invalid': $v.n_total.$invalid }"/>
+                 :class="{'input': true, 'is-invalid': $v.n_total.$invalid,
+                          'input-sm': true}"/>
+
           {{$t('exercises')}}!
+
+          <div class="invalid-feedback">
+                {{error_message_list[ERRID_NTOTAL_FIELD]}}
+          </div>
+
+
       </div>
 
+
       <div class="col text-left mt-3 ml-2 pl-3 p-0 m-0 border-left">
-        <p>Choisis les opérations:</p>
+        <p>Choose the operations:</p>
 
           <div v-for="(operation, opid) in all_operations_text_labels"
-               class="form-check" v-bind:key="operation">
+               :class="{'form-check': true,
+                        'is-invalid': error_message_list[ERRID_OPS_SELECT].length > 0}"
+               v-bind:key="operation">
 
               <input
                 class="form-check-input"
@@ -55,19 +68,13 @@
                 {{operation}}
               </label>
          </div>
+         <br/>
+         <div class="invalid-feedback">
+               {{error_message_list[ERRID_OPS_SELECT]}}
+         </div>
+
 
       </div>
-    </div>
-
-
-    <!-- error messages -->
-    <div id="error_message"  v-if="!is_ok_to_start()" class="list-group mt-2 mb-2">
-        <a v-for="(msg_part, msg_indx) in error_message_list"
-            v-bind:key="msg_indx + '-error-message'"
-            class="list-group-item-warning" href="#">
-          {{msg_part}}
-        </a>
-
     </div>
 
 
@@ -77,7 +84,7 @@
                 class="btn btn-success"
                 type="button"
                 name="button"
-                :disabled="!is_ok_to_start()"
+                :disabled="!enable_start_button"
                 @click="on_start">{{$t('yes_lets_start')}}</button>
       </div>
 
@@ -213,9 +220,11 @@ export default {
       timer_refresh_interval_id: -1,
       progress: 0,
       selected_language: i18n.locale,
-      error_message_list: [],
+      error_message_list: ["", ""],
       ERRID_NTOTAL_FIELD: 0,
-      ERRID_OPS_SELECT: 1
+      ERRID_OPS_SELECT: 1,
+      max_value: 100,
+      enable_start_button: true
     }
   },
   created: function(){
@@ -280,13 +289,19 @@ export default {
       this.elapsed_time = dt.format("hh [h] mm [min] ss [sec]");
       return this.elapsed_time;
     },
+
+    get_random_int: function (min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+    },
+
     generate_equation_data: function () {
       this.equation_data = [];
       this.n_tried = -1;
       this.n_correct = 0;
       //this.progress = Math.floor(this.n_tried / this.n_total * 100);
 
-      const MAX_NUM = 100;
       var i;
       var num1, num2, num3;
       var r; // from [0, 1)
@@ -300,7 +315,7 @@ export default {
         }
       }
 
-      console.log(cur_operations);
+      // console.log(cur_operations);
 
       var operation;
 
@@ -309,19 +324,30 @@ export default {
 
         r = Math.random();
 
-        num1 = Math.floor(r * MAX_NUM);
-        num2 = Math.floor(r * num1);
-
         operation = cur_operations[Math.floor(r * cur_operations.length)];
 
         if (operation === "add") {
-          num3 = num1 + num2;
+          num3 = this.get_random_int(Math.floor(this.max_value / 10), this.max_value);
+          num1 = this.get_random_int(1, num3);
+          num2 = num3 - num1;
+
         } else if (operation === "sub") {
+
+          num1 = this.get_random_int(Math.floor(this.max_value / 10), this.max_value);
+          num2 = this.get_random_int(1, num1);
           num3 = num1 - num2;
+
         } else if (operation === "mul") {
+          num3 = this.get_random_int(Math.floor(this.max_value / 10), this.max_value);
+          num2 = this.get_random_int(1, Math.floor(num3 / 2));
+
+          num1 = Math.floor(num3 / num2)
           num3 = num1 * num2;
         } else if (operation === "div") {
+          num1 = this.get_random_int(Math.floor(this.max_value / 10), this.max_value);
+          num2 = this.get_random_int(1, Math.floor(num1 / 2));
           num3 = Math.floor(num1 / num2);
+          num1 = num2 * num3;
         }
 
 
@@ -352,7 +378,7 @@ export default {
       i18n.locale = selected_language;
     },
     on_edit_n_total: function (){
-      var msg = "Please fix the number of exercises: should be integer between 1 and " + this.MAX_NUM_EQUATIONS;
+      var msg = "Number of exercises should be an integer between 1 and " + this.MAX_NUM_EQUATIONS;
       if (this.$v.n_total.$invalid) {
         this.push_error(msg, this.ERRID_NTOTAL_FIELD);
       } else {
@@ -382,9 +408,11 @@ export default {
     },
     push_error: function(msg, idx) {
       this.error_message_list[idx] = msg;
+      this.enable_start_button = false;
     },
     pop_error: function(msg, idx) {
       this.error_message_list[idx] = "";
+      this.enable_start_button = this.is_ok_to_start();
     }
 
   },
