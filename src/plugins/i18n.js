@@ -19,7 +19,14 @@ const messages = {
          'you_have_to_practice_more': "il faut pratiquer plus",
          'try_to_speed_up': "Essayez de faire les calculs plus vite",
          'about': "À propos",
-         'integer_is_required': "Un entier est requis"
+         'integer_is_required': "Un entier est requis",
+         'number_of_exercises_should_be': "Le nombre d'exercices devrait être entre 1 et",
+         'addition': "Addition",
+         'subtraction': "Soustraction",
+         'multiplication': "Multiplication",
+         'division': "Division",
+         'choose_operations': "Choisis les opérations:",
+         'you_need_to_select_at_least_one_operation': "Tu dois choisir au moins une opération!"
         },
   'en': {'hello': 'Hi',
          'pls_enter_your_name': 'Please enter your name',
@@ -37,7 +44,14 @@ const messages = {
          'you_have_to_practice_more': "you have to practice more",
          'try_to_speed_up': "Try to speed up your calculations",
          'about': "About",
-         'integer_is_required': "An integer is required"
+         'integer_is_required': "An integer is required",
+         'number_of_exercises_should_be': "Number of exercises should be between 1 and",
+         'addition': "Addition",
+         'subtraction': "Subtraction",
+         'multiplication': "Multiplication",
+         'division': "Division",
+         'choose_operations': "Choose operations:",
+         'you_need_to_select_at_least_one_operation': "You have to choose at least one operation!"
         }
 }
 

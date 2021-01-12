@@ -40,7 +40,7 @@
           {{$t('exercises')}}!
 
           <div class="invalid-feedback">
-                {{error_message_list[ERRID_NTOTAL_FIELD]}}
+                {{$t("number_of_exercises_should_be") + " " + MAX_NUM_EQUATIONS}}
           </div>
 
 
@@ -48,7 +48,7 @@
 
 
       <div class="col text-left mt-3 ml-2 pl-3 p-0 m-0 border-left">
-        <p>Choose the operations:</p>
+        <p>{{$t('choose_operations')}}</p>
 
           <div v-for="(operation, opid) in all_operations_text_labels"
                :class="{'form-check': true,
@@ -65,12 +65,12 @@
               />
 
               <label class="form-check-label" :for="opid + '_opt'">
-                {{operation}}
+                {{$t(operation)}}
               </label>
          </div>
          <br/>
          <div class="invalid-feedback">
-               {{error_message_list[ERRID_OPS_SELECT]}}
+               {{$t('you_need_to_select_at_least_one_operation')}}
          </div>
 
 
@@ -197,16 +197,23 @@ export default {
       n_total: 10,
       num_upper_limit_list: [100, 500, 1000, 10000],
       all_operations_text_labels: { // operation to text label map
-        "add": "Addition",
-        "sub": "Subtraction",
-        "mul": "Multiplication",
-        "div": "Division"
+        "add": "addition",
+        "sub": "subtraction",
+        "mul": "multiplication",
+        "div": "division"
       },
       all_operations_symbols: {
-        "add": "+", "sub": "-", "mul": "\u00D7", "div": "\u00F7"
+        "add": "+",
+        "sub": "-",
+        "mul": "\u00D7",
+        "div": "\u00F7"
       },
-      selected_operations: {"add": true, "sub": true, "mul": false, "div": false},
-
+      selected_operations: {
+        "add": true,
+        "sub": true,
+        "mul": false,
+        "div": false
+      },
       equation_data: [],
 
       n_correct: 0,
@@ -378,7 +385,7 @@ export default {
       i18n.locale = selected_language;
     },
     on_edit_n_total: function (){
-      var msg = "Number of exercises should be an integer between 1 and " + this.MAX_NUM_EQUATIONS;
+      var msg = this.$t("number_of_exercises_should_be") + " " + this.MAX_NUM_EQUATIONS;
       if (this.$v.n_total.$invalid) {
         this.push_error(msg, this.ERRID_NTOTAL_FIELD);
       } else {
