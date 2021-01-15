@@ -6,6 +6,8 @@ const messages = {
   'fr': {'hello': 'Salut',
          'pls_enter_your_name': 'Entrez votre nom SVP',
          'lets_do_few_exercises': 'faisons quelques exercices',
+         'lets_do_few': 'faisons quelques',
+         'exercises': 'exercices',
          'yes_lets_start': 'Oui, on commence',
          'enter_missing_numbers': 'Entrez les nombres manquants',
          'well_played': 'Bien joué',
@@ -17,11 +19,22 @@ const messages = {
          'you_have_to_practice_more': "il faut pratiquer plus",
          'try_to_speed_up': "Essayez de faire les calculs plus vite",
          'about': "À propos",
-         'integer_is_required': "Un entier est requis"
+         'integer_is_required': "Un entier est requis",
+         'number_of_exercises_should_be': "Le nombre d'exercices devrait être entre",
+         'addition': "Addition",
+         'subtraction': "Soustraction",
+         'multiplication': "Multiplication",
+         'division': "Division",
+         'choose_operations': "Choisis les opérations:",
+         'you_need_to_select_at_least_one_operation': "Tu dois choisir au moins une opération!",
+         'and': "et",
+         'i_can_compute_numbers_up_to': "Je peux faire les calculs avec les nombres jusqu'à"
         },
   'en': {'hello': 'Hi',
          'pls_enter_your_name': 'Please enter your name',
          'lets_do_few_exercises': "let's do few exercises",
+         'lets_do_few': "let's do few",
+         'exercises': 'exercises',
          'yes_lets_start': "Yes, start",
          'enter_missing_numbers': "Enter missing numbers",
          'well_played': 'Well played',
@@ -33,7 +46,16 @@ const messages = {
          'you_have_to_practice_more': "you have to practice more",
          'try_to_speed_up': "Try to speed up your calculations",
          'about': "About",
-         'integer_is_required': "An integer is required"
+         'integer_is_required': "An integer is required",
+         'number_of_exercises_should_be': "Number of exercises should be between",
+         'addition': "Addition",
+         'subtraction': "Subtraction",
+         'multiplication': "Multiplication",
+         'division': "Division",
+         'choose_operations': "Choose operations:",
+         'you_need_to_select_at_least_one_operation': "You have to choose at least one operation!",
+         'and': "and",
+         'i_can_compute_numbers_up_to': "I can compute numbers up to"
         }
 }
 

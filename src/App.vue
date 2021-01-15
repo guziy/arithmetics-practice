@@ -13,25 +13,98 @@
     </div>
 
 
-    <div class="row justify-content-center pt-3 m-0">
-      <label for="player-name"> {{$t('pls_enter_your_name')}}:
-          <input id="player-name" type="text" v-model="name"
-                v-on:keyup.enter="$refs.start_button.focus()"/>
-      </label>
-    </div>
 
-    <div class="row m-0">
-      <div class="col text-center p-3">
-          {{$t("hello")}} <b>{{name}}</b>, {{$t('lets_do_few_exercises')}}!
+
+    <div class="row justify-content-center p-3 m-0 mb-3">
+      <div class="col">
+        <label for="player-name"> {{$t('pls_enter_your_name')}}:
+            <input id="player-name" type="text" v-model="name"
+                  v-on:keyup.enter="$refs.start_button.focus()"/>
+        </label>
       </div>
     </div>
+
+    <div class="row justify-content-center m-0 p-3 mb-3">
+      <div class="col-12 text-center p-3 my-auto border-bottom">
+
+          {{$t("hello")}} <b>{{name}}</b>, {{$t('lets_do_few')}}
+
+          <input id="num-equations"
+                 v-model="$v.n_total.$model"
+                 size="4"
+                 v-on:keyup="on_edit_n_total()"
+                 :disabled="(n_tried >= 0) && false"
+                 :class="{'input': true, 'is-invalid': $v.n_total.$invalid,
+                          'input-sm': true}"/>
+
+          {{$t('exercises')}}!
+
+          <div class="invalid-feedback">
+                {{$t("number_of_exercises_should_be") + " " + MIN_NUM_EQUATIONS + " " + $t("and") + " " + MAX_NUM_EQUATIONS}}
+          </div>
+
+
+      </div>
+
+      <!-- choose operations -->
+      <div class="col-5 text-left pl-0 pt-2 mt-2">
+        <p>{{$t('choose_operations')}}</p>
+
+          <div v-for="(operation, opid) in all_operations_text_labels"
+               :class="{'form-check': true,
+                        'is-invalid': error_message_list[ERRID_OPS_SELECT].length > 0}"
+               v-bind:key="operation">
+
+              <input
+                class="form-check-input"
+                type="checkbox"
+                :value=opid
+                v-model="selected_operations[opid]"
+                :id="opid + '_opt'"
+                @change="on_change_operations($event)"
+              />
+
+              <label class="form-check-label" :for="opid + '_opt'">
+                {{$t(operation)}}
+              </label>
+         </div>
+         <br/>
+         <div class="invalid-feedback">
+               {{$t('you_need_to_select_at_least_one_operation')}}
+         </div>
+      </div>
+
+      <!-- maximum values -->
+      <div class="col-5 text-left pt-2 m-0 mt-2 border-left">
+          <p>{{$t('i_can_compute_numbers_up_to') + ' '}} </p>
+
+          <select v-model="max_value" @change="on_change_max_value()" class="custom-select">
+              <option v-for="limit in num_upper_limit_list"
+                      v-bind:key="'upper_limit-' + limit"
+                      :value="limit">
+                {{limit}}
+              </option>
+
+          </select>
+
+      </div>
+
+    </div>
+
 
     <div class="row m-0">
       <div class="col text-center">
-        <button ref="start_button" type="button" name="button" @click="on_start">{{$t('yes_lets_start')}}</button>
+        <button ref="start_button"
+                class="btn btn-success"
+                type="button"
+                name="button"
+                :disabled="!enable_start_button"
+                @click="on_start">{{$t('yes_lets_start')}}</button>
       </div>
 
     </div>
+
+
 
 <!--
     <div v-if="start_time != ''" class="row">
@@ -47,7 +120,7 @@
           <ul id="equation-list" class="list-group list-group-flush">
             <li :class="['list-group-item', {'current-equation': eq.equation_index == n_tried}]"
                 v-for="eq in equation_data"
-                :key="eq.equation_index" v-show="eq.equation_index <= n_tried">
+                :key="eq.equation_index + 'A'" v-show="eq.equation_index <= n_tried">
 
               <equation :equation_data="eq" :event_bus="event_bus"
                         :n_tried="n_tried" @oncorrect-equation="on_correct"
@@ -91,12 +164,15 @@
             </div>
           </div>
 
-          <div id="end_message" class="alert alert-success" v-if="n_tried === n_total">
+          <div id="end_message" class="alert alert-success"
+                v-if="n_tried === n_total"
+                :style="[is_show_genius_fireworks ? {'background-image': 'url(' + genius_fireworks + ')'} : {}]">
             <span> {{$t('exercise_is_finished')}} {{name}}, {{$t('it_took_you')}} {{elapsed_time}}: </span>
             <span v-if="n_correct == n_total">{{$t('you_are_a_genius')}}!</span>
             <span v-else-if="(n_correct > 0.5 * n_total)">{{$t('well_played_but_there_is_space_for_improvement')}}!</span>
             <span v-else-if="(n_correct <= 0.5 * n_total)">{{$t('you_have_to_practice_more')}}!</span>
             <span v-else-if="(elapsed_time_seconds > 180 * n_total)"><br>{{$t('try_to_speed_up')}}.</span>
+
           </div>
         </div>
 
@@ -115,6 +191,9 @@ import {i18n} from '@/plugins/i18n';
 
 momentDurationFormatSetup(moment);
 
+import { required, integer, between } from 'vuelidate/lib/validators'
+
+import image from "../assets/fireworks1.gif"
 
 export default {
   title: 'Arithmetics practice',
@@ -124,9 +203,29 @@ export default {
   },
   data: function (){
     return {
+      MAX_NUM_EQUATIONS: 500,
+      MIN_NUM_EQUATIONS: 5,
       name: "",
       n_total: 10,
-
+      num_upper_limit_list: [100, 500, 1000, 10000],
+      all_operations_text_labels: { // operation to text label map
+        "add": "addition",
+        "sub": "subtraction",
+        "mul": "multiplication",
+        "div": "division"
+      },
+      all_operations_symbols: {
+        "add": "+",
+        "sub": "-",
+        "mul": "\u00D7",
+        "div": "\u00F7"
+      },
+      selected_operations: {
+        "add": true,
+        "sub": true,
+        "mul": false,
+        "div": false
+      },
       equation_data: [],
 
       n_correct: 0,
@@ -139,7 +238,14 @@ export default {
       event_bus: new Vue(),
       timer_refresh_interval_id: -1,
       progress: 0,
-      selected_language: i18n.locale
+      selected_language: i18n.locale,
+      error_message_list: ["", ""],
+      ERRID_NTOTAL_FIELD: 0,
+      ERRID_OPS_SELECT: 1,
+      max_value: 100,
+      enable_start_button: true,
+      genius_fireworks: image,
+      is_show_genius_fireworks: false
     }
   },
   created: function(){
@@ -155,7 +261,7 @@ export default {
     on_focus_equation: function(event){
       if (event.src_index === this.n_total - 1) {
         console.log(event.src_index)
-        clearInterval(this.timer_refresh_interval_id);
+
         this.$nextTick(
           () => {
             this.$refs.end_message.scrollIntoView({
@@ -170,9 +276,22 @@ export default {
       this.n_tried++;
       this.n_correct += event.correct;
       this.progress = Math.floor(this.n_tried / this.n_total * 100);
+
+      if (this.n_tried === this.n_total){
+        clearInterval(this.timer_refresh_interval_id);
+      }
+
+
+      // Show some fireworks as encouragement
+      if (this.n_tried == this.n_total) {
+        this.is_show_genius_fireworks = this.n_correct > 0.8 * this.n_total;
+      }
+
     },
     //on commence btn action
     on_start: function(){
+
+
       this.start_time = moment();
       this.elapsed_time = this.get_elapsed_time();
 
@@ -182,8 +301,12 @@ export default {
       }
 
       this.timer_refresh_interval_id = setInterval(this.get_elapsed_time, 1000);
-      this.generate_equation_data();
 
+      this.generate_equation_data();
+      this.n_tried = 0;
+      this.progress = 0; // reset the progress bar
+
+      this.is_show_genius_fireworks = false;
 
     },
     get_current_time: function (){
@@ -195,63 +318,147 @@ export default {
       this.elapsed_time = dt.format("hh [h] mm [min] ss [sec]");
       return this.elapsed_time;
     },
+
+    get_random_int: function (min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+    },
+
     generate_equation_data: function () {
       this.equation_data = [];
-      this.n_tried = 0;
+      this.n_tried = -1;
       this.n_correct = 0;
-      this.progress = Math.floor(this.n_tried / this.n_total * 100);
+      //this.progress = Math.floor(this.n_tried / this.n_total * 100);
 
-      const MAX_NUM = 100;
       var i;
       var num1, num2, num3;
-      var additon;
       var r; // from [0, 1)
+
+
+      var cur_operations = [];
+
+      for (const [key, status] of Object.entries(this.selected_operations)){
+        if (status) {
+          cur_operations.push(key);
+        }
+      }
+
+      // console.log(cur_operations);
+
+      var operation;
+
       for (i = 0; i < this.n_total; i++) {
         //console.log(i);
 
         r = Math.random();
 
-        additon = r < 0.5;
+        operation = cur_operations[Math.floor(r * cur_operations.length)];
 
-        num1 = Math.floor(r * MAX_NUM);
+        if (operation === "add") {
+          num3 = this.get_random_int(Math.floor(this.max_value / 10), this.max_value);
+          num1 = this.get_random_int(1, num3);
+          num2 = num3 - num1;
 
-        num2 = Math.floor(r * num1);
+        } else if (operation === "sub") {
 
-        if (num1 < 10){
-          num1 += 13;
-          num2 += 8;
-        }
-
-        if (num1 + num2 > MAX_NUM) {
-          additon = false;
-        }
-
-        var operation;
-        if (additon){
-          num3 = num1 + num2;
-          operation = "+";
-        } else {
+          num1 = this.get_random_int(Math.floor(this.max_value / 10), this.max_value);
+          num2 = this.get_random_int(1, num1);
           num3 = num1 - num2;
-          operation = "-";
+
+        } else if (operation === "mul") {
+          num3 = this.get_random_int(Math.floor(this.max_value / 10), this.max_value);
+          num2 = this.get_random_int(1, Math.floor(num3 / 2));
+
+          num1 = Math.floor(num3 / num2)
+          num3 = num1 * num2;
+        } else if (operation === "div") {
+          num1 = this.get_random_int(Math.floor(this.max_value / 10), this.max_value);
+          num2 = this.get_random_int(1, Math.floor(num1 / 2));
+          num3 = Math.floor(num1 / num2);
+          num1 = num2 * num3;
         }
+
+
 
         var input_index;
         input_index = Math.floor(3 * Math.random());
         let t = [num1, num2, num3];
+        let correct_answer = t[input_index];
         t[input_index] = -1;
         this.equation_data.push(
-          {triple: t, operation: operation, input_index: input_index, equation_index: i}
+          {
+            triple: t,
+            operation_symbol: this.all_operations_symbols[operation],
+            operation: operation,
+            input_index: input_index,
+            equation_index: i,
+            correct_answer: correct_answer
+          }
         );
       }
-  }, // generate_equation_data
-  on_change_language: function (selected_language){
-    if (selected_language === this.selected_language){
-      return;
+
+    }, // generate_equation_data
+    on_change_language: function (selected_language){
+      if (selected_language === this.selected_language){
+        return;
+      }
+      this.selected_language = selected_language;
+      i18n.locale = selected_language;
+    },
+    on_edit_n_total: function (){
+      var msg = this.$t("number_of_exercises_should_be") + " " + this.MAX_NUM_EQUATIONS;
+      if (this.$v.n_total.$invalid) {
+        this.push_error(msg, this.ERRID_NTOTAL_FIELD);
+      } else {
+        this.pop_error(msg, this.ERRID_NTOTAL_FIELD);
+        this.n_total = Number(this.$v.n_total.$model);
+      }
+      this.n_tried = -1;
+    },
+    is_ok_to_start: function(){
+      // assume that the initial settings are valid
+      return this.error_message_list.reduce((acc, item) => acc && (item.length === 0), true);
+    },
+    on_change_max_value: function(){
+      this.n_tried = -1;
+    },
+    on_change_operations: function(){
+      // needed for error checking
+      var any_selected = false;
+      Object.values(this.selected_operations).forEach( (value) => {
+        any_selected = any_selected || value;
+      });
+
+      var msg = "You need to select at least one operation!";
+      if (!any_selected) {
+        this.push_error(msg, this.ERRID_OPS_SELECT);
+      } else {
+        this.pop_error(msg, this.ERRID_OPS_SELECT);
+      }
+      this.n_tried = -1;
+    },
+    push_error: function(msg, idx) {
+      this.error_message_list[idx] = msg;
+      this.enable_start_button = false;
+    },
+    pop_error: function(msg, idx) {
+      this.error_message_list[idx] = "";
+      this.enable_start_button = this.is_ok_to_start();
     }
-    this.selected_language = selected_language;
-    i18n.locale = selected_language;
+
+  },
+  validations() {
+    return {
+      n_total: {
+        required,
+        integer,
+        between: between(this.MIN_NUM_EQUATIONS, this.MAX_NUM_EQUATIONS)
+      }
+    }
   }
-}
+
+
 
 
 }
@@ -290,9 +497,6 @@ export default {
   background-color: grey;
 }
 
-#app button {
-  color: #2c3e50;
-}
 
 li.current-equation{
   border-bottom: none;

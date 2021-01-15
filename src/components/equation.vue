@@ -19,7 +19,6 @@ function equation_initial_state() {
 
 import { required, integer } from 'vuelidate/lib/validators'
 
-
 export default {
 
     name: "equation",
@@ -42,6 +41,7 @@ export default {
           this.$nextTick(
             () => {
                 if (this.is_visible()){
+                    // console.log("Focusing on:" + this.$refs.input[0] + ", from " + event.src_index);
                     this.$refs.input[0].focus();
                     this.$refs.input[0].scrollIntoView();
                 }
@@ -52,7 +52,9 @@ export default {
 
     mounted: function () {
     },
-
+    beforeDestroy(){
+      this.event_bus.$off("focus-equation");
+    },
     methods: {
       on_correct: function (event) {
         //TODO: add action
@@ -68,7 +70,7 @@ export default {
           return
         }
 
-        this.is_correct = this.correct_answer == this.user_answer;
+        this.is_correct = this.correct_answer === Number(this.user_answer);
 
         event = {
           correct: this.is_correct,
@@ -76,7 +78,11 @@ export default {
         };
 
         this.$emit("oncorrect-equation", event);
-        this.event_bus.$emit("focus-equation", {src_index: this.equation_data.equation_index});
+
+        // focus on the next equation
+        this.event_bus.$emit("focus-equation",
+                               {src_index: this.equation_data.equation_index});
+
         this.corrected = true;
       },
       is_visible: function() {
@@ -86,46 +92,15 @@ export default {
       get_equation_tokens: function() {
         var tokens = this.equation_data.triple.slice();
         tokens.splice(2, 0, '=');
-        tokens.splice(1, 0, this.equation_data.operation);
+        tokens.splice(1, 0, this.equation_data.operation_symbol);
 
         return tokens
       },
 
       init_equation: function () {
-        var nums = this.equation_data.triple;
         //console.log("init_equation with " + nums.join(",") );
+        this.correct_answer = this.equation_data.correct_answer;
 
-        if (this.equation_data.operation === "+") {
-          switch (this.equation_data.input_index) {
-            case 0:
-              this.correct_answer = nums[2] - nums[1];
-              break;
-
-            case 1:
-              this.correct_answer = nums[2] - nums[0];
-              break;
-
-            case 2:
-              this.correct_answer = nums[0] + nums[1];
-              break;
-          }
-        } else if (this.equation_data.operation === "-") {
-          switch (this.equation_data.input_index) {
-            case 0:
-              this.correct_answer = nums[1] + nums[2];
-              break;
-
-            case 1:
-              this.correct_answer = nums[0] - nums[2];
-              break;
-
-            case 2:
-              this.correct_answer = nums[0] - nums[1];
-              break;
-          }
-        } else {
-          console.log("operation: " + this.operation + "is not implemented.");
-        }
         this.corrected = false;
         this.correct = false;
         this.user_answer = "";
@@ -166,35 +141,39 @@ export default {
 <template id="equation">
   <form action="javascript:void(0);">
   <div class="row justify-content-center">
-      <div class="text-nowrap p-2">
-        <span v-for="token in tokens" v-bind:key="token">
-          <span v-if="token === -1" class="mr-1">
+      <div class="col-xs-auto my-auto text-left text-nowrap pt-2 pb-2">
+        <span v-for="(token, i) in tokens"
+              v-bind:key="i + '-eq_term of eq-' + equation_data.equation_index">
+          <span v-if="token === -1" class="mr-2">
             <input size="4"  v-model="$v.user_answer.$model"
                    type="text"
                    v-on:keyup.enter="on_correct()"
                    :disabled="corrected"
-                   :class="{'input': true, 'is-invalid': !$v.user_answer.integer}"
+                   :class="{'input': true, 'is-invalid': $v.user_answer.$invalid}"
                    ref="input"/>
           </span>
-          <span v-else class="mr-1">
+          <span v-else class="mr-2">
             {{token}}
           </span>
         </span>
       </div>
-      <div v-if="!corrected" class="p-2 my-auto">
-          <button type="button" @click="on_correct()" class="mr-2"><font-awesome-icon icon="check" /></button>
+      <div v-if="!corrected" class="col-xs-auto my-auto text-left text-nowrap">
+          <button type="button"
+                  @click="on_correct()"
+                  class="btn btn-sm btn-secondary mr-2"><font-awesome-icon
+                  icon="check" /></button>
           <font-awesome-icon icon="spinner" />
       </div>
-      <div v-if="corrected && is_correct" class="text-success p-2 my-auto">
-        <font-awesome-icon icon="check" class="mr-2" />
+      <div v-if="corrected && is_correct" class="text-success col-xs-auto my-auto text-left">
+        <font-awesome-icon icon="check" class="" />
         {{$t('well_played')}}!
       </div>
-      <div v-if="corrected && !is_correct" class="text-danger p-2 my-auto">
+      <div v-if="corrected && !is_correct" class="text-danger col-xs-auto my-auto text-left">
           <font-awesome-icon icon="times" />
           {{$t('the_answer_is')}}: {{correct_answer}}.
       </div>
 
-      <div class="p-2 mb-0 alert alert-danger"
+      <div class="col-xs-auto alert alert-danger my-auto text-left m-0"
            v-if="!$v.user_answer.integer">
            {{$t('integer_is_required')}}!
       </div>
