@@ -19,7 +19,6 @@ function equation_initial_state() {
 
 import { required, integer } from 'vuelidate/lib/validators'
 
-
 export default {
 
     name: "equation",
@@ -142,7 +141,7 @@ export default {
 <template id="equation">
   <form action="javascript:void(0);">
   <div class="row justify-content-center">
-      <div class="col-md-auto my-auto text-left text-nowrap pt-2 pb-2">
+      <div class="col-xs-auto my-auto text-left text-nowrap pt-2 pb-2">
         <span v-for="(token, i) in tokens"
               v-bind:key="i + '-eq_term of eq-' + equation_data.equation_index">
           <span v-if="token === -1" class="mr-2">
@@ -158,23 +157,23 @@ export default {
           </span>
         </span>
       </div>
-      <div v-if="!corrected" class="col-md-auto my-auto text-left text-nowrap">
+      <div v-if="!corrected" class="col-xs-auto my-auto text-left text-nowrap">
           <button type="button"
                   @click="on_correct()"
                   class="btn btn-sm btn-secondary mr-2"><font-awesome-icon
                   icon="check" /></button>
           <font-awesome-icon icon="spinner" />
       </div>
-      <div v-if="corrected && is_correct" class="text-success col-md-auto my-auto text-left">
+      <div v-if="corrected && is_correct" class="text-success col-xs-auto my-auto text-left">
         <font-awesome-icon icon="check" class="" />
         {{$t('well_played')}}!
       </div>
-      <div v-if="corrected && !is_correct" class="text-danger col-md-auto my-auto text-left">
+      <div v-if="corrected && !is_correct" class="text-danger col-xs-auto my-auto text-left">
           <font-awesome-icon icon="times" />
           {{$t('the_answer_is')}}: {{correct_answer}}.
       </div>
 
-      <div class="col-md-auto alert alert-danger my-auto text-left m-0"
+      <div class="col-xs-auto alert alert-danger my-auto text-left m-0"
            v-if="!$v.user_answer.integer">
            {{$t('integer_is_required')}}!
       </div>

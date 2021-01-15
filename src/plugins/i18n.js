@@ -20,13 +20,15 @@ const messages = {
          'try_to_speed_up': "Essayez de faire les calculs plus vite",
          'about': "À propos",
          'integer_is_required': "Un entier est requis",
-         'number_of_exercises_should_be': "Le nombre d'exercices devrait être entre 1 et",
+         'number_of_exercises_should_be': "Le nombre d'exercices devrait être entre",
          'addition': "Addition",
          'subtraction': "Soustraction",
          'multiplication': "Multiplication",
          'division': "Division",
          'choose_operations': "Choisis les opérations:",
-         'you_need_to_select_at_least_one_operation': "Tu dois choisir au moins une opération!"
+         'you_need_to_select_at_least_one_operation': "Tu dois choisir au moins une opération!",
+         'and': "et",
+         'i_can_compute_numbers_up_to': "Je peux faire les calculs avec les nombres jusqu'à"
         },
   'en': {'hello': 'Hi',
          'pls_enter_your_name': 'Please enter your name',
@@ -45,13 +47,15 @@ const messages = {
          'try_to_speed_up': "Try to speed up your calculations",
          'about': "About",
          'integer_is_required': "An integer is required",
-         'number_of_exercises_should_be': "Number of exercises should be between 1 and",
+         'number_of_exercises_should_be': "Number of exercises should be between",
          'addition': "Addition",
          'subtraction': "Subtraction",
          'multiplication': "Multiplication",
          'division': "Division",
          'choose_operations': "Choose operations:",
-         'you_need_to_select_at_least_one_operation': "You have to choose at least one operation!"
+         'you_need_to_select_at_least_one_operation': "You have to choose at least one operation!",
+         'and': "and",
+         'i_can_compute_numbers_up_to': "I can compute numbers up to"
         }
 }
 

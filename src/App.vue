@@ -24,8 +24,8 @@
       </div>
     </div>
 
-    <div class="row justify-content-center m-0 pb-3 mb-3 border border-dark rounded">
-      <div class="col text-center m-0 mt-3 my-auto">
+    <div class="row justify-content-center m-0 p-3 mb-3">
+      <div class="col-12 text-center p-3 my-auto border-bottom">
 
           {{$t("hello")}} <b>{{name}}</b>, {{$t('lets_do_few')}}
 
@@ -40,14 +40,14 @@
           {{$t('exercises')}}!
 
           <div class="invalid-feedback">
-                {{$t("number_of_exercises_should_be") + " " + MAX_NUM_EQUATIONS}}
+                {{$t("number_of_exercises_should_be") + " " + MIN_NUM_EQUATIONS + " " + $t("and") + " " + MAX_NUM_EQUATIONS}}
           </div>
 
 
       </div>
 
-
-      <div class="col text-left mt-3 ml-2 pl-3 p-0 m-0 border-left">
+      <!-- choose operations -->
+      <div class="col-5 text-left pl-0 pt-2 mt-2">
         <p>{{$t('choose_operations')}}</p>
 
           <div v-for="(operation, opid) in all_operations_text_labels"
@@ -72,9 +72,23 @@
          <div class="invalid-feedback">
                {{$t('you_need_to_select_at_least_one_operation')}}
          </div>
+      </div>
 
+      <!-- maximum values -->
+      <div class="col-5 text-left pt-2 m-0 mt-2 border-left">
+          <p>{{$t('i_can_compute_numbers_up_to') + ' '}} </p>
+
+          <select v-model="max_value" @change="on_change_max_value()" class="custom-select">
+              <option v-for="limit in num_upper_limit_list"
+                      v-bind:key="'upper_limit-' + limit"
+                      :value="limit">
+                {{limit}}
+              </option>
+
+          </select>
 
       </div>
+
     </div>
 
 
@@ -150,19 +164,15 @@
             </div>
           </div>
 
-          <div id="end_message" class="alert alert-success" v-if="n_tried === n_total">
+          <div id="end_message" class="alert alert-success"
+                v-if="n_tried === n_total"
+                :style="[is_show_genius_fireworks ? {'background-image': 'url(' + genius_fireworks + ')'} : {}]">
             <span> {{$t('exercise_is_finished')}} {{name}}, {{$t('it_took_you')}} {{elapsed_time}}: </span>
             <span v-if="n_correct == n_total">{{$t('you_are_a_genius')}}!</span>
             <span v-else-if="(n_correct > 0.5 * n_total)">{{$t('well_played_but_there_is_space_for_improvement')}}!</span>
             <span v-else-if="(n_correct <= 0.5 * n_total)">{{$t('you_have_to_practice_more')}}!</span>
             <span v-else-if="(elapsed_time_seconds > 180 * n_total)"><br>{{$t('try_to_speed_up')}}.</span>
 
-
-            <div class="row" v-if="n_correct == n_total">
-              <div class="col m-3">
-                <img src="https://media.giphy.com/media/h1zypyYAgZE96sCNuV/giphy.gif" height="200px"/>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -183,6 +193,7 @@ momentDurationFormatSetup(moment);
 
 import { required, integer, between } from 'vuelidate/lib/validators'
 
+import image from "../assets/fireworks1.gif"
 
 export default {
   title: 'Arithmetics practice',
@@ -193,6 +204,7 @@ export default {
   data: function (){
     return {
       MAX_NUM_EQUATIONS: 500,
+      MIN_NUM_EQUATIONS: 5,
       name: "",
       n_total: 10,
       num_upper_limit_list: [100, 500, 1000, 10000],
@@ -231,7 +243,9 @@ export default {
       ERRID_NTOTAL_FIELD: 0,
       ERRID_OPS_SELECT: 1,
       max_value: 100,
-      enable_start_button: true
+      enable_start_button: true,
+      genius_fireworks: image,
+      is_show_genius_fireworks: false
     }
   },
   created: function(){
@@ -267,6 +281,12 @@ export default {
         clearInterval(this.timer_refresh_interval_id);
       }
 
+
+      // Show some fireworks as encouragement
+      if (this.n_tried == this.n_total) {
+        this.is_show_genius_fireworks = this.n_correct > 0.8 * this.n_total;
+      }
+
     },
     //on commence btn action
     on_start: function(){
@@ -285,6 +305,8 @@ export default {
       this.generate_equation_data();
       this.n_tried = 0;
       this.progress = 0; // reset the progress bar
+
+      this.is_show_genius_fireworks = false;
 
     },
     get_current_time: function (){
@@ -398,6 +420,9 @@ export default {
       // assume that the initial settings are valid
       return this.error_message_list.reduce((acc, item) => acc && (item.length === 0), true);
     },
+    on_change_max_value: function(){
+      this.n_tried = -1;
+    },
     on_change_operations: function(){
       // needed for error checking
       var any_selected = false;
@@ -428,7 +453,7 @@ export default {
       n_total: {
         required,
         integer,
-        between: between(1, this.MAX_NUM_EQUATIONS)
+        between: between(this.MIN_NUM_EQUATIONS, this.MAX_NUM_EQUATIONS)
       }
     }
   }
