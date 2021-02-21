@@ -16,7 +16,7 @@
 
         <!-- language selection -->
         <div class="col-sm-auto my-auto">
-          
+            
             <select v-model="$i18n.locale" class="selectpicker show-tick form-control btn btn-info" 
                                            data-width="fit">
               <option v-for="(alang_name, alang_id) in available_locales" 

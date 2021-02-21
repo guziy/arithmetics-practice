@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 Vue.use(VueI18n)
 
-
+import getBrowserLocale from '@/util/i18n/get-browser-locale'
+import {supportedLocalesInclude} from '@/util/i18n/supported-locales'
 
 const messages = {
   'fr': {
@@ -62,7 +63,19 @@ const messages = {
         }
 }
 
-export const i18n = new VueI18n({    locale: 'fr', // set locale
+
+
+function getStartingLocale() {
+       const browserLocale = getBrowserLocale({ countryCodeOnly: true })
+     
+       if (supportedLocalesInclude(browserLocale)) {
+         return browserLocale
+       } else {
+         return process.env.VUE_APP_I18N_LOCALE || "en"
+       }
+}
+
+export const i18n = new VueI18n({  locale: getStartingLocale(), // set locale
                                 fallbackLocale: 'en', // set fallback locale
                                 messages: messages, // set locale messages
 });
