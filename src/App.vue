@@ -5,10 +5,28 @@
   <div class="container mt-0 p-0" id="app">
 
     <div id="language-bar" class="container border rounded mb-5">
-      <div class="p-2 text-right">
-        <a class="p-2 mr-3" href="http://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">{{$t('about')}}</a>
-        <a v-bind:class="['p-2', selected_language === 'fr' ? 'current-language' : '']" href="#" @click.prevent="on_change_language('fr')">Fr</a>
-        <a v-bind:class="['p-2',selected_language === 'en' ? 'current-language' : '']" href="#" @click.prevent="on_change_language('en')">En</a>
+      <div class="row justify-content-between p-2">
+
+        <div class="col-sm-auto mr-0 my-auto">
+          <a class="btn" 
+             href="http://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">{{$t('about')}}</a>
+        </div>  
+
+
+
+        <!-- language selection -->
+        <div class="col-sm-auto my-auto">
+          
+            <select v-model="$i18n.locale" class="selectpicker show-tick form-control btn btn-info" 
+                                           data-width="fit">
+              <option v-for="(alang_name, alang_id) in available_locales" 
+                      v-bind:key="'lang-' + alang_id" :value="alang_id">
+                {{alang_name}}
+              </option>
+            </select>
+        </div>
+
+
       </div>
     </div>
 
@@ -65,7 +83,7 @@
               />
 
               <label class="form-check-label" :for="opid + '_opt'">
-                {{$t(operation)}}
+               ( <b>{{all_operations_symbols[opid]}}</b> ) {{$t(operation)}} 
               </label>
          </div>
          <br/>
@@ -78,7 +96,8 @@
       <div class="col-5 text-left pt-2 m-0 mt-2 border-left">
           <p>{{$t('i_can_compute_numbers_up_to') + ' '}} </p>
 
-          <select v-model="max_value" @change="on_change_max_value()" class="custom-select">
+          <select v-model="max_value" @change="on_change_max_value()" 
+                  class="custom-select" data-width="fit">
               <option v-for="limit in num_upper_limit_list"
                       v-bind:key="'upper_limit-' + limit"
                       :value="limit">
@@ -194,6 +213,8 @@ import { required, integer, between } from 'vuelidate/lib/validators'
 
 import image from "../assets/fireworks1.gif"
 
+import available_locales from "@/config/supported-locales"
+
 export default {
   title: 'Arithmetics practice',
   name: 'App',
@@ -237,8 +258,8 @@ export default {
       event_bus: new Vue(),
       timer_refresh_interval_id: -1,
       progress: 0,
+      available_locales: available_locales,
       selected_language: this.$i18n.locale,
-      available_languages: this.$i18n.messages,
       error_message_list: ["", ""],
       ERRID_NTOTAL_FIELD: 0,
       ERRID_OPS_SELECT: 1,
@@ -492,15 +513,17 @@ export default {
   background-color: black;
 }
 
-#language-bar a{
-  color: white;
-  font-weight: bold;
-}
 
 #language-bar a.current-language {
   background-color: grey;
 }
 
+#language-bar .btn {
+  color: white;
+  background-color: black;
+  border-color: white;
+  font-weight: bold;  
+}
 
 li.current-equation{
   border-bottom: none;

@@ -2,8 +2,11 @@ import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 Vue.use(VueI18n)
 
+
+
 const messages = {
-  'fr': {'hello': 'Salut',
+  'fr': {
+         'hello': 'Salut',
          'pls_enter_your_name': 'Entrez votre nom SVP',
          'lets_do_few_exercises': 'faisons quelques exercices',
          'lets_do_few': 'faisons quelques',
