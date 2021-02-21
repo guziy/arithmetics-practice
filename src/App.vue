@@ -5,9 +5,9 @@
   <div class="container mt-0 p-0" id="app">
 
     <div id="language-bar" class="container border rounded mb-3">
-      <div class="row justify-content-between p-2">
+      <div class="row justify-content-end p-1">
 
-        <div class="col-sm-auto p-2 my-auto">
+        <div class="col-xs-auto p-1 my-auto">
           <a class="btn" 
              href="http://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">{{$t('about')}}</a>
         </div>  
@@ -15,7 +15,7 @@
 
 
         <!-- language selection -->
-        <div class="col-sm-auto my-auto p-2">
+        <div class="col-xs-auto my-auto p-1">
             
             <select v-model="$i18n.locale" class="selectpicker show-tick btn"
                     data-width="auto">
