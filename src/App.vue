@@ -207,7 +207,7 @@ export default {
       MIN_NUM_EQUATIONS: 5,
       name: "",
       n_total: 10,
-      num_upper_limit_list: [100, 500, 1000, 10000],
+      num_upper_limit_list: [20, 50, 100, 500, 1000, 10000],
       all_operations_text_labels: { // operation to text label map
         "add": "addition",
         "sub": "subtraction",
@@ -288,6 +288,9 @@ export default {
       }
 
     },
+    scroll_to_bottom: function() {
+        window.scrollTo(0, document.body.scrollHeight);
+    },
     //on commence btn action
     on_start: function(){
 
@@ -307,6 +310,7 @@ export default {
       this.progress = 0; // reset the progress bar
 
       this.is_show_genius_fireworks = false;
+      this.$nextTick(this.scroll_to_bottom);
 
     },
     get_current_time: function (){
