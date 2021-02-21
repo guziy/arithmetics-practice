@@ -15,7 +15,7 @@
 
 
 
-    <div class="row justify-content-center p-3 m-0 mb-3">
+    <div class="row justify-content-center p-1 m-0 mb-1">
       <div class="col">
         <label for="player-name"> {{$t('pls_enter_your_name')}}:
             <input id="player-name" type="text" v-model="name"
@@ -187,7 +187,6 @@ import equation from './components/equation.vue'
 import Vue from 'vue'
 import moment from 'moment'
 import momentDurationFormatSetup from 'moment-duration-format'
-import {i18n} from '@/plugins/i18n';
 
 momentDurationFormatSetup(moment);
 
@@ -238,7 +237,8 @@ export default {
       event_bus: new Vue(),
       timer_refresh_interval_id: -1,
       progress: 0,
-      selected_language: i18n.locale,
+      selected_language: this.$i18n.locale,
+      available_languages: this.$i18n.messages,
       error_message_list: ["", ""],
       ERRID_NTOTAL_FIELD: 0,
       ERRID_OPS_SELECT: 1,
@@ -408,7 +408,7 @@ export default {
         return;
       }
       this.selected_language = selected_language;
-      i18n.locale = selected_language;
+      this.$i18n.locale = selected_language;
     },
     on_edit_n_total: function (){
       var msg = this.$t("number_of_exercises_should_be") + " " + this.MAX_NUM_EQUATIONS;
