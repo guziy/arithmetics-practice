@@ -11,15 +11,15 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/vue-fontawesome": "^0.1.9",
-    "bootstrap": "^4.4.1",
+    "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.4",
     "jquery": "^3.5.0",
     "moment": "^2.24.0",
     "moment-duration-format": "^2.3.2",
+    "node": "^15.8.0",
     "popper.js": "^1.16.1",
     "vue": "^2.6.11",
     "vue-i18n": "^8.15.4",
-    "vue-page-title": "^1.1.6",
     "vuelidate": "^0.7.5"
   },
   "devDependencies": {

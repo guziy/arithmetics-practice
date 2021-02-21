@@ -1,8 +1,12 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
+// import 'bootstrap'
+// import 'bootstrap/dist/css/bootstrap.min.css'
+
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
@@ -22,17 +26,21 @@ library.add(faStopwatch)
 import Vuelidate from 'vuelidate'
 
 Vue.use(Vuelidate)
+Vue.use(BootstrapVue);
+
 
 import {i18n} from '@/plugins/i18n'
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
+/**
 import VuePageTitle from 'vue-page-title'
 
 Vue.use(VuePageTitle, {
   prefix: '',
   // suffix: '- My App '
 })
+ */
 
 
 Vue.config.productionTip = false

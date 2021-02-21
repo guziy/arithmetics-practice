@@ -4,10 +4,10 @@
 
   <div class="container mt-0 p-0" id="app">
 
-    <div id="language-bar" class="container border rounded mb-5">
+    <div id="language-bar" class="container border rounded mb-3">
       <div class="row justify-content-between p-2">
 
-        <div class="col-sm-auto mr-0 my-auto">
+        <div class="col-sm-auto p-2 my-auto">
           <a class="btn" 
              href="http://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">{{$t('about')}}</a>
         </div>  
@@ -15,10 +15,10 @@
 
 
         <!-- language selection -->
-        <div class="col-sm-auto my-auto">
+        <div class="col-sm-auto my-auto p-2">
             
-            <select v-model="$i18n.locale" class="selectpicker show-tick form-control btn btn-info" 
-                                           data-width="fit">
+            <select v-model="$i18n.locale" class="selectpicker show-tick btn"
+                    data-width="auto">
               <option v-for="(alang_name, alang_id) in available_locales" 
                       v-bind:key="'lang-' + alang_id" :value="alang_id">
                 {{alang_name}}
