@@ -9,22 +9,39 @@
 
         <b-nav-item href="http://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">{{$t('about')}}</b-nav-item>
 
-
+      </b-navbar-nav>
         <!-- language selection -->
 
-        <b-nav-item-dropdown right v-model="$i18n.locale" class="mr-auto">            
-                <template slot="button-content">
-                    <font-awesome-icon icon="globe"/>
-                </template>
+      <b-navbar-nav class="ml-auto">
+          <b-nav-item-dropdown v-model="$i18n.locale" right>            
+                  <template v-slot:button-content>
+                      <font-awesome-icon icon="globe"/>
+                      <span class="nav-link-inner--text d-lg-none">Language</span>
+                  </template>
 
-              <b-dropdown-item href="#" v-for="(alang_name, alang_id) in available_locales" 
-                      v-bind:key="'lang-' + alang_id" :value="alang_id"
-                      @click="on_change_language(alang_id)">
-                {{alang_name}}
-              </b-dropdown-item>
-        </b-nav-item-dropdown>
+                <b-dropdown-item href="#" v-for="(alang_name, alang_id) in available_locales" 
+                        v-bind:key="'lang-' + alang_id" :value="alang_id"
+                        @click="on_change_language(alang_id)">
+                  
+                  <div class="row justify-content-start">
 
+                    <!-- Check mark for the selected language -->
+                    <div class="col-2">
+                      <font-awesome-icon icon="check" v-if="alang_id === $i18n.locale"/> 
+                    </div>
+
+
+                    <div class="col-9">
+                      {{alang_name}}
+                    </div> 
+
+                  </div>
+
+                </b-dropdown-item>
+          </b-nav-item-dropdown>
       </b-navbar-nav>
+
+      
     </b-navbar>
 
 
