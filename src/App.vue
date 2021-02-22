@@ -16,7 +16,6 @@
           <b-nav-item-dropdown v-model="$i18n.locale" right>            
                   <template v-slot:button-content>
                       <font-awesome-icon icon="globe"/>
-                      <span class="nav-link-inner--text d-lg-none">Language</span>
                   </template>
 
                 <b-dropdown-item href="#" v-for="(alang_name, alang_id) in available_locales" 
