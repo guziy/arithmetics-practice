@@ -12,7 +12,7 @@
 
         <!-- language selection -->
 
-        <b-nav-item-dropdown right v-model="$i18n.locale">            
+        <b-nav-item-dropdown right v-model="$i18n.locale" class="mr-auto">            
                 <template slot="button-content">
                     <font-awesome-icon icon="globe"/>
                 </template>
