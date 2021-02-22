@@ -5,8 +5,8 @@ import App from './App.vue'
 // import 'bootstrap/dist/css/bootstrap.min.css'
 
 import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-vue/dist/bootstrap-vue.min.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
@@ -14,6 +14,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { faStopwatch } from '@fortawesome/free-solid-svg-icons'
+import { faGlobe } from '@fortawesome/free-solid-svg-icons'
 
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -22,6 +23,7 @@ library.add(faSpinner)
 library.add(faCheck)
 library.add(faTimes)
 library.add(faStopwatch)
+library.add(faGlobe)
 
 import Vuelidate from 'vuelidate'
 

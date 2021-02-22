@@ -4,36 +4,33 @@
 
   <div class="container mt-0 p-0" id="app">
 
-    <div id="language-bar" class="container border rounded mb-3">
-      <div class="row justify-content-end p-1">
+    <b-navbar type="dark" variant="dark">
+      <b-navbar-nav>
 
-        <div class="col-xs-auto p-1 my-auto">
-          <a class="btn" 
-             href="http://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">{{$t('about')}}</a>
-        </div>  
-
+        <b-nav-item href="http://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">{{$t('about')}}</b-nav-item>
 
 
         <!-- language selection -->
-        <div class="col-xs-auto my-auto p-1">
-            
-            <select v-model="$i18n.locale" class="selectpicker show-tick btn"
-                    data-width="auto">
-              <option v-for="(alang_name, alang_id) in available_locales" 
-                      v-bind:key="'lang-' + alang_id" :value="alang_id">
+
+        <b-nav-item-dropdown right v-model="$i18n.locale">            
+                <template slot="button-content">
+                    <font-awesome-icon icon="globe"/>
+                </template>
+
+              <b-dropdown-item href="#" v-for="(alang_name, alang_id) in available_locales" 
+                      v-bind:key="'lang-' + alang_id" :value="alang_id"
+                      @click="on_change_language(alang_id)">
                 {{alang_name}}
-              </option>
-            </select>
-        </div>
+              </b-dropdown-item>
+        </b-nav-item-dropdown>
 
-
-      </div>
-    </div>
+      </b-navbar-nav>
+    </b-navbar>
 
 
 
 
-    <div class="row justify-content-center p-1 m-0 mb-1">
+    <div class="row justify-content-center p-1 m-0 mt-5 mb-1">
       <div class="col">
         <label for="player-name"> {{$t('pls_enter_your_name')}}:
             <input id="player-name" type="text" v-model="name"
@@ -425,10 +422,10 @@ export default {
 
     }, // generate_equation_data
     on_change_language: function (selected_language){
-      if (selected_language === this.selected_language){
+      if (this.$i18n.locale === selected_language){
         return;
       }
-      this.selected_language = selected_language;
+
       this.$i18n.locale = selected_language;
     },
     on_edit_n_total: function (){
@@ -522,7 +519,6 @@ export default {
   color: white;
   background-color: black;
   border-color: white;
-  font-weight: bold;  
 }
 
 li.current-equation{
