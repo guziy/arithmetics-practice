@@ -16,7 +16,6 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { faStopwatch } from '@fortawesome/free-solid-svg-icons'
 import { faGlobe } from '@fortawesome/free-solid-svg-icons'
 
-
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faUserSecret)
 library.add(faSpinner)
@@ -24,6 +23,11 @@ library.add(faCheck)
 library.add(faTimes)
 library.add(faStopwatch)
 library.add(faGlobe)
+
+
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
+library.add(faGithub)
+
 
 import Vuelidate from 'vuelidate'
 

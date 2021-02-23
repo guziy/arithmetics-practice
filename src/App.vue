@@ -7,12 +7,17 @@
     <b-navbar type="dark" variant="dark">
       <b-navbar-nav>
 
-        <b-nav-item href="http://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">{{$t('about')}}</b-nav-item>
+        <b-nav-item href="https://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">{{$t('about')}}</b-nav-item>
 
       </b-navbar-nav>
         <!-- language selection -->
 
       <b-navbar-nav class="ml-auto">
+
+          <b-nav-item href="https://github.com/guziy/arithmetics-practice">
+            <font-awesome-icon :icon="['fab', 'github']"/>
+          </b-nav-item>
+
           <b-nav-item-dropdown v-model="$i18n.locale" right>            
                   <template v-slot:button-content>
                       <font-awesome-icon icon="globe"/>
