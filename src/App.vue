@@ -126,7 +126,17 @@
 
       </div>
 
+
+      <!-- display options -->
+      <div class="col-12 border-top m-0 pt-2 mt-2 text-center">
+          <input class="form-check-input" id="show-all-equations-cb" type="checkbox" v-model="show_all_equations"/>
+          <label for="show-all-equations-cb" class="form-check-label">{{$t('show_all_equations')}}</label>
+      </div>
+      
     </div>
+
+
+
 
 
     <div class="row m-0">
@@ -157,7 +167,7 @@
           <ul id="equation-list" class="list-group list-group-flush">
             <li :class="['list-group-item', {'current-equation': eq.equation_index == n_tried}]"
                 v-for="eq in equation_data"
-                :key="eq.equation_index + 'A'" v-show="eq.equation_index <= n_tried">
+                :key="eq.equation_index + 'A'" v-show="eq.equation_index <= n_tried || show_all_equations">
 
               <equation :equation_data="eq" :event_bus="event_bus"
                         :n_tried="n_tried" @oncorrect-equation="on_correct"
@@ -284,7 +294,8 @@ export default {
       max_value: 100,
       enable_start_button: true,
       genius_fireworks: image,
-      is_show_genius_fireworks: false
+      is_show_genius_fireworks: false,
+      show_all_equations: false
     }
   },
   created: function(){
