@@ -21,7 +21,7 @@ import { required, integer } from 'vuelidate/lib/validators'
 
 export default {
 
-    name: "equation",
+    name: "equation-item",
 
     props:["equation_data", "event_bus",
            "n_tried", "n_total"],
