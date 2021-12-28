@@ -32,7 +32,8 @@ const messages = {
          'choose_operations': "Choisis les opérations:",
          'you_need_to_select_at_least_one_operation': "Tu dois choisir au moins une opération!",
          'and': "et",
-         'i_can_compute_numbers_up_to': "Je peux faire les calculs avec les nombres jusqu'à"
+         'i_can_compute_numbers_up_to': "Je peux faire les calculs avec les nombres jusqu'à",
+         'show_all_equations': "Afficher tous les équations"
         },
   'en': {'hello': 'Hi',
          'pls_enter_your_name': 'Please enter your name',
@@ -59,7 +60,8 @@ const messages = {
          'choose_operations': "Choose operations:",
          'you_need_to_select_at_least_one_operation': "You have to choose at least one operation!",
          'and': "and",
-         'i_can_compute_numbers_up_to': "I can compute numbers up to"
+         'i_can_compute_numbers_up_to': "I can compute numbers up to",
+         'show_all_equations': "Show all equations"
         }
 }
 
