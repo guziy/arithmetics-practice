@@ -3,6 +3,8 @@
 # abort on errors
 set -e
 
+export NODE_OPTIONS=--openssl-legacy-provider
+
 # build
 yarn build
 
