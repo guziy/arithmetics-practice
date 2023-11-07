@@ -233,6 +233,8 @@
 import equation from './components/equation.vue'
 import Vue from 'vue'
 import moment from 'moment'
+import "moment/locale/uk";
+
 import momentDurationFormatSetup from 'moment-duration-format'
 
 momentDurationFormatSetup(moment);
@@ -369,7 +371,8 @@ export default {
     get_elapsed_time: function(){
       let dt = moment.duration(this.get_current_time().diff(this.start_time));
       this.elapsed_time_seconds = dt;
-      this.elapsed_time = dt.format("hh [h] mm [min] ss [sec]");
+      this.elapsed_time = dt.format("hh _ mm _ ss _");
+      console.log(moment.locale(), this.$i18n.locale);
       return this.elapsed_time;
     },
 
@@ -459,6 +462,7 @@ export default {
       }
 
       this.$i18n.locale = selected_language;
+      moment.locale(selected_language);
     },
     on_edit_n_total: function (){
       var msg = this.$t("number_of_exercises_should_be") + " " + this.MAX_NUM_EQUATIONS;

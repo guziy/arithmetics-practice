@@ -33,7 +33,8 @@ const messages = {
          'you_need_to_select_at_least_one_operation': "Tu dois choisir au moins une opération!",
          'and': "et",
          'i_can_compute_numbers_up_to': "Je peux faire les calculs avec les nombres jusqu'à",
-         'show_all_equations': "Afficher tous les équations"
+         'show_all_equations': "Afficher tous les équations",
+         'sec': "sec",
         },
   'en': {'hello': 'Hi',
          'pls_enter_your_name': 'Please enter your name',
@@ -61,8 +62,37 @@ const messages = {
          'you_need_to_select_at_least_one_operation': "You have to choose at least one operation!",
          'and': "and",
          'i_can_compute_numbers_up_to': "I can compute numbers up to",
-         'show_all_equations': "Show all equations"
-        }
+         'show_all_equations': "Show all equations",
+        },
+  'uk': {'hello': 'Привіт',
+        'pls_enter_your_name': "Будь ласка, введіть своє ім'я",
+        'lets_do_few_exercises': "виконаємо кілька вправ",
+        'lets_do_few': "давайте зробимо декілька",
+        'exercises': 'вправ',
+        'yes_lets_start': "Так, почати",
+        'enter_missing_numbers': "Введіть пропущені числа",
+        'well_played': 'Добре зіграно',
+        'the_answer_is': 'Відповідь',
+        'exercise_is_finished': 'Вправу завершено',
+        'it_took_you': "вам знадобилося",
+        'you_are_a_genius': "ти геній",
+        'well_played_but_there_is_space_for_improvement': "добре зіграно, але ще є місце для вдосконалення",
+        'you_have_to_practice_more': "ви повинні тренуватися більше",
+        'try_to_speed_up': "Спробуйте пришвидшити свої обчислення",
+        'about': "About",
+        'integer_is_required': "Потрібне ціле число",
+        'number_of_exercises_should_be': "Кількість вправ має бути між",
+        'addition': "Додавання",
+        'subtraction': "Віднімання",
+        'multiplication': "Множення",
+        'division': "Ділення",
+        'choose_operations': "Виберіть операції:",
+        'you_need_to_select_at_least_one_operation': "Ви повинні вибрати принаймні одну операцію!",
+        'and': "і",
+        'i_can_compute_numbers_up_to': "Я можу обчислювати числа до",
+        'show_all_equations': "Показати всі рівняння",
+       }
+  
 }
 
 
