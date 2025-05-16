@@ -1,275 +1,32 @@
-<template>
+<script setup lang="ts">
 
 
+//import equation from './components/equation.vue'
 
-  <div class="container mt-0 p-0" id="app">
+//import { required, integer, between } from 'vuelidate/lib/validators'
 
-    <b-navbar type="dark" variant="dark">
-      <b-navbar-nav>
+//import image from "../assets/fireworks1.gif"
+//import image from '@assets/fireworks1.gif';
 
-        <b-nav-item href="https://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">{{$t('about')}}</b-nav-item>
+//import available_locales from "@/config/supported-locales"
 
-      </b-navbar-nav>
-        <!-- language selection -->
+import { ref } from 'vue'
 
-      <b-navbar-nav class="ml-auto">
+import {
+  MAX_NUM_EQUATIONS, 
+  MIN_NUM_EQUATIONS,
+  num_upper_limit_list,
+  all_operations_text_labels,
+  all_operations_symbols
+} from './util/constants.js'
+import EquationBlock from './components/equation-block.vue';
+import menuBlock from './components/menu-block.vue';
 
-          <b-nav-item href="https://github.com/guziy/arithmetics-practice">
-            <font-awesome-icon :icon="['fab', 'github']"/>
-          </b-nav-item>
-
-          <b-nav-item-dropdown v-model="$i18n.locale" right>            
-                  <template v-slot:button-content>
-                      <font-awesome-icon icon="globe"/>
-                  </template>
-
-                <b-dropdown-item href="#" v-for="(alang_name, alang_id) in available_locales" 
-                        v-bind:key="'lang-' + alang_id" :value="alang_id"
-                        @click="on_change_language(alang_id)">
-                  
-                  <div class="row justify-content-start">
-
-                    <!-- Check mark for the selected language -->
-                    <div class="col-2">
-                      <font-awesome-icon icon="check" v-if="alang_id === $i18n.locale"/> 
-                    </div>
-
-
-                    <div class="col-9">
-                      {{alang_name}}
-                    </div> 
-
-                  </div>
-
-                </b-dropdown-item>
-          </b-nav-item-dropdown>
-      </b-navbar-nav>
-
-      
-    </b-navbar>
-
-
-
-
-    <div class="row justify-content-center p-1 m-0 mt-5 mb-1">
-      <div class="col">
-        <label for="player-name"> {{$t('pls_enter_your_name')}}:
-            <input id="player-name" type="text" v-model="name"
-                  v-on:keyup.enter="$refs.start_button.focus()"/>
-        </label>
-      </div>
-    </div>
-
-    <div class="row justify-content-center m-0 p-3 mb-3">
-      <div class="col-12 text-center p-3 my-auto border-bottom">
-
-          {{$t("hello")}} <b>{{name}}</b>, {{$t('lets_do_few')}}
-
-          <input id="num-equations"
-                 v-model="$v.n_total.$model"
-                 size="4"
-                 v-on:keyup="on_edit_n_total()"
-                 :disabled="(n_tried >= 0) && false"
-                 :class="{'input': true, 'is-invalid': $v.n_total.$invalid,
-                          'input-sm': true}"/>
-
-          {{$t('exercises')}}!
-
-          <div class="invalid-feedback">
-                {{$t("number_of_exercises_should_be") + " " + MIN_NUM_EQUATIONS + " " + $t("and") + " " + MAX_NUM_EQUATIONS}}
-          </div>
-
-
-      </div>
-
-      <!-- choose operations -->
-      <div class="col-5 text-left pl-0 pt-2 mt-2">
-        <p>{{$t('choose_operations')}}</p>
-
-          <div v-for="(operation, opid) in all_operations_text_labels"
-               :class="{'form-check': true,
-                        'is-invalid': error_message_list[ERRID_OPS_SELECT].length > 0}"
-               v-bind:key="operation">
-
-              <input
-                class="form-check-input"
-                type="checkbox"
-                :value=opid
-                v-model="selected_operations[opid]"
-                :id="opid + '_opt'"
-                @change="on_change_operations($event)"
-              />
-
-              <label class="form-check-label" :for="opid + '_opt'">
-               ( <b>{{all_operations_symbols[opid]}}</b> ) {{$t(operation)}} 
-              </label>
-         </div>
-         <br/>
-         <div class="invalid-feedback">
-               {{$t('you_need_to_select_at_least_one_operation')}}
-         </div>
-      </div>
-
-      <!-- maximum values -->
-      <div class="col-5 text-left pt-2 m-0 mt-2 border-left">
-          <p>{{$t('i_can_compute_numbers_up_to') + ' '}} </p>
-
-          <select v-model="max_value" @change="on_change_max_value()" 
-                  class="custom-select" data-width="fit">
-              <option v-for="limit in num_upper_limit_list"
-                      v-bind:key="'upper_limit-' + limit"
-                      :value="limit">
-                {{limit}}
-              </option>
-
-          </select>
-
-      </div>
-
-
-      <!-- display options -->
-      <div class="col-12 border-top m-0 pt-2 mt-2 text-center">
-          <input class="form-check-input" id="show-all-equations-cb" type="checkbox" v-model="show_all_equations"/>
-          <label for="show-all-equations-cb" class="form-check-label">{{$t('show_all_equations')}}</label>
-      </div>
-      
-    </div>
-
-
-
-
-
-    <div class="row m-0">
-      <div class="col text-center">
-        <button ref="start_button"
-                class="btn btn-success"
-                type="button"
-                name="button"
-                :disabled="!enable_start_button"
-                @click="on_start">{{$t('yes_lets_start')}}</button>
-      </div>
-
-    </div>
-
-
-
-<!--
-    <div v-if="start_time != ''" class="row">
-      <div class="col text-center m-3">
-          Temps ecoulé: <b>{{elapsed_time}}</b>
-      </div>
-    </div>
--->
-      <div id="equation-container" class="row m-0 mt-5" v-if="n_tried >= 0">
-        <div class="col-12 mb-3">{{$t('enter_missing_numbers')}}:</div>
-
-        <div class="col-12">
-          <ul id="equation-list" class="list-group list-group-flush">
-            <li :class="['list-group-item', {'current-equation': eq.equation_index == n_tried}]"
-                v-for="eq in equation_data"
-                :key="eq.equation_index + 'A'" v-show="eq.equation_index <= n_tried || show_all_equations">
-
-              <equation :equation_data="eq" :event_bus="event_bus"
-                        :n_tried="n_tried" @oncorrect-equation="on_correct"
-                        :n_total="n_total"
-                        ></equation>
-
-            </li>
-          </ul>
-        </div>
-
-
-        <div class="col-12 mt-0 text-right">
-          <div class="p-1 ml-5">
-            <a href="#" class="badge badge-dark">{{n_tried}} / {{n_total}}</a>
-          </div>
-        </div>
-
-        <div class="col-12 mt-0">
-          <div class="progress" style="height: 3px;">
-            <div class="progress-bar" role="progressbar"
-                :aria-valuenow="progress" aria-valuemin="0"
-                :style="{width: progress + '%'} "
-                aria-valuemax="100">
-            </div>
-          </div>
-        </div>
-
-        <div id="footer" ref="end_message" class="col-12" v-if="n_tried >= 0">
-          <div class="row justify-content-center">
-
-            <div class="col-6 p-3">
-              <font-awesome-icon icon="stopwatch"/> <br/> {{elapsed_time}}
-            </div>
-
-            <div class="col-3 p-3">
-              <span class="text-success"><font-awesome-icon icon="check"/> <br/> {{n_correct}}</span>
-            </div>
-
-            <div class="col-3 p-3">
-              <span class="text-danger"><font-awesome-icon icon="times"/> <br/>{{n_tried - n_correct}}</span>
-            </div>
-          </div>
-
-          <div id="end_message" class="alert alert-success"
-                v-if="n_tried === n_total"
-                :style="[is_show_genius_fireworks ? {'background-image': 'url(' + genius_fireworks + ')'} : {}]">
-            <span> {{$t('exercise_is_finished')}} {{name}}, {{$t('it_took_you')}} {{elapsed_time}}: </span>
-            <span v-if="n_correct == n_total">{{$t('you_are_a_genius')}}!</span>
-            <span v-else-if="(n_correct > 0.5 * n_total)">{{$t('well_played_but_there_is_space_for_improvement')}}!</span>
-            <span v-else-if="(n_correct <= 0.5 * n_total)">{{$t('you_have_to_practice_more')}}!</span>
-            <span v-else-if="(elapsed_time_seconds > 180 * n_total)"><br>{{$t('try_to_speed_up')}}.</span>
-
-          </div>
-        </div>
-
-      </div>
-
-
-  </div>
-</template>
-
-<script>
-import equation from './components/equation.vue'
-import Vue from 'vue'
-import moment from 'moment'
-import "moment/locale/uk";
-
-import momentDurationFormatSetup from 'moment-duration-format'
-
-momentDurationFormatSetup(moment);
-
-import { required, integer, between } from 'vuelidate/lib/validators'
-
-import image from "../assets/fireworks1.gif"
-
-import available_locales from "@/config/supported-locales"
-
-export default {
-  title: 'Arithmetics practice',
-  name: 'App',
-  components: {
-    equation
-  },
-  data: function (){
+/*
+  data(){
     return {
-      MAX_NUM_EQUATIONS: 500,
-      MIN_NUM_EQUATIONS: 5,
       name: "",
       n_total: 10,
-      num_upper_limit_list: [20, 50, 100, 500, 1000, 10000],
-      all_operations_text_labels: { // operation to text label map
-        "add": "addition",
-        "sub": "subtraction",
-        "mul": "multiplication",
-        "div": "division"
-      },
-      all_operations_symbols: {
-        "add": "+",
-        "sub": "-",
-        "mul": "\u00D7",
-        "div": "\u00F7"
-      },
       selected_operations: {
         "add": true,
         "sub": true,
@@ -285,7 +42,7 @@ export default {
       elapsed_time: 0,
       elapsed_time_seconds: 0,
       current_time: "",
-      event_bus: new Vue(),
+      event_bus: createApp(),
       timer_refresh_interval_id: -1,
       progress: 0,
       available_locales: available_locales,
@@ -303,10 +60,7 @@ export default {
   created: function(){
     //this.generate_equation_data();
     //register getting elapsed_time every second
-
     this.event_bus.$on("focus-equation", this.on_focus_equation);
-
-
   },
   methods: {
 
@@ -317,7 +71,8 @@ export default {
         this.$nextTick(
           () => {
             this.$refs.end_message.scrollIntoView({
-              behavior: 'smooth', block: 'end'
+              behavior: 'smooth', 
+              block: 'end'
             });
           }
         );
@@ -347,7 +102,7 @@ export default {
     on_start: function(){
 
 
-      this.start_time = moment();
+      this.start_time = new Date();
       this.elapsed_time = this.get_elapsed_time();
 
       if (this.timer_refresh_interval_id !== -1) {
@@ -366,14 +121,10 @@ export default {
 
     },
     get_current_time: function (){
-      return moment();
+      return new Date();
     },
     get_elapsed_time: function(){
-      let dt = moment.duration(this.get_current_time().diff(this.start_time));
-      this.elapsed_time_seconds = dt;
-      this.elapsed_time = dt.format("hh _ mm _ ss _");
-      console.log(moment.locale(), this.$i18n.locale);
-      return this.elapsed_time;
+      return "";
     },
 
     get_random_int: function (min, max) {
@@ -460,9 +211,8 @@ export default {
       if (this.$i18n.locale === selected_language){
         return;
       }
-
+      console.log(selected_language);
       this.$i18n.locale = selected_language;
-      moment.locale(selected_language);
     },
     on_edit_n_total: function (){
       var msg = this.$t("number_of_exercises_should_be") + " " + this.MAX_NUM_EQUATIONS;
@@ -515,12 +265,20 @@ export default {
       }
     }
   }
+**/
 
-
-
-
-}
 </script>
+
+
+
+<template>
+  <div id="App">
+    <menu-block />
+    "Hello"
+    <p>MAX_NUM_EQUATIONS = {{ MAX_NUM_EQUATIONS }} </p>
+  </div>
+</template>
+
 
 <style>
 #app {

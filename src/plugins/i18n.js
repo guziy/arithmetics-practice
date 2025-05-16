@@ -1,9 +1,7 @@
-import Vue from 'vue'
-import VueI18n from 'vue-i18n'
-Vue.use(VueI18n)
 
 import getBrowserLocale from '@/util/i18n/get-browser-locale'
 import {supportedLocalesInclude} from '@/util/i18n/supported-locales'
+import { createI18n } from 'vue-i18n'
 
 const messages = {
   'fr': {
@@ -71,15 +69,15 @@ const messages = {
         'exercises': 'вправ',
         'yes_lets_start': "Так, почати",
         'enter_missing_numbers': "Введіть пропущені числа",
-        'well_played': 'Добре зіграно',
-        'the_answer_is': 'Відповідь',
+        'well_played': 'Правильно',
+        'the_answer_is': 'Ні, відповідь',
         'exercise_is_finished': 'Вправу завершено',
         'it_took_you': "вам знадобилося",
-        'you_are_a_genius': "ти геній",
+        'you_are_a_genius': "Ви геній",
         'well_played_but_there_is_space_for_improvement': "добре зіграно, але ще є місце для вдосконалення",
         'you_have_to_practice_more': "ви повинні тренуватися більше",
         'try_to_speed_up': "Спробуйте пришвидшити свої обчислення",
-        'about': "About",
+        'about': "Інформація",
         'integer_is_required': "Потрібне ціле число",
         'number_of_exercises_should_be': "Кількість вправ має бути між",
         'addition': "Додавання",
@@ -103,11 +101,16 @@ function getStartingLocale() {
        if (supportedLocalesInclude(browserLocale)) {
          return browserLocale
        } else {
-         return process.env.VUE_APP_I18N_LOCALE || "en"
-       }
+         return import.meta.env.VITE_I18N_LOCALE || "en"
+       } 
 }
 
-export const i18n = new VueI18n({  locale: getStartingLocale(), // set locale
-                                fallbackLocale: 'en', // set fallback locale
-                                messages: messages, // set locale messages
-});
+
+export function getI18n() {
+  return createI18n({
+    locale: getStartingLocale(),
+    fallbackLocale: 'en',
+    allowComposition: true, // you need to specify that!
+    messages: messages
+  });
+}

@@ -1,5 +1,3 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production'
-    ? '/arithmetics-practice/'
-    : '/'
+  publicPath: import.meta.env.NODE_ENV === 'production' ? '/arithmetics-practice/' : '/'
 }
