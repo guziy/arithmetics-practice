@@ -8,7 +8,7 @@
 //import image from "../assets/fireworks1.gif"
 //import image from '@assets/fireworks1.gif';
 
-//import available_locales from "@/config/supported-locales"
+
 
 import { ref } from 'vue'
 
@@ -207,13 +207,6 @@ import menuBlock from './components/menu-block.vue';
       }
 
     }, // generate_equation_data
-    on_change_language: function (selected_language){
-      if (this.$i18n.locale === selected_language){
-        return;
-      }
-      console.log(selected_language);
-      this.$i18n.locale = selected_language;
-    },
     on_edit_n_total: function (){
       var msg = this.$t("number_of_exercises_should_be") + " " + this.MAX_NUM_EQUATIONS;
       if (this.$v.n_total.$invalid) {
@@ -280,45 +273,27 @@ import menuBlock from './components/menu-block.vue';
 </template>
 
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  max-width: 600px;
-}
-/* Define an animation behavior */
-@keyframes spinner {
-  to { transform: rotate(360deg); }
-}
-/* This is the class name given by the Font Awesome component when icon contains 'spinner' */
-.fa-spinner {
-  /* Apply 'spinner' keyframes looping once every second (1s)  */
-  animation: spinner 1.5s linear infinite;
-}
-
-#language-bar{
-  color: white;
-  background-color: black;
-}
+<style scoped>
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    max-width: 600px;
+  }
+  /* Define an animation behavior */
+  @keyframes spinner {
+    to { transform: rotate(360deg); }
+  }
+  /* This is the class name given by the Font Awesome component when icon contains 'spinner' */
+  .fa-spinner {
+    /* Apply 'spinner' keyframes looping once every second (1s)  */
+    animation: spinner 1.5s linear infinite;
+  }
 
 
-#language-bar a.current-language {
-  background-color: grey;
-}
-
-#language-bar .btn {
-  color: white;
-  background-color: black;
-  border-color: white;
-}
-
-li.current-equation{
-  border-bottom: none;
-}
-
-
-
+  li.current-equation{
+    border-bottom: none;
+  }
 </style>

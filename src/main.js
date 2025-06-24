@@ -19,14 +19,13 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { faStopwatch } from '@fortawesome/free-solid-svg-icons'
 import { faGlobe } from '@fortawesome/free-solid-svg-icons'
 
-//import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faUserSecret)
 library.add(faSpinner)
 library.add(faCheck)
 library.add(faTimes)
 library.add(faStopwatch)
 library.add(faGlobe)
-
 
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { createBootstrap } from 'bootstrap-vue-next'
@@ -35,7 +34,7 @@ library.add(faGithub)
 
 //import Vuelidate from 'vuelidate'
 
-//import {getI18n} from '@/plugins/i18n'
+import {getI18n} from '@/plugins/i18n'
 
 
 
@@ -58,12 +57,13 @@ require("moment/locale/uk");
 const app = createApp(App)
 app.use(createBootstrap())
 
-/**
+
 app.use(getI18n())
+/**
 app.use(Vuelidate)
 app.use(BootstrapVue);
-app.component('font-awesome-icon', FontAwesomeIcon)
 */
+app.component('font-awesome-icon', FontAwesomeIcon)
 
 //app.use(formatDistance)
 app.mount('#app')
