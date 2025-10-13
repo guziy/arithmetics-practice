@@ -110,7 +110,6 @@ export function getI18n() {
   return createI18n({
     locale: getStartingLocale(),
     fallbackLocale: 'en',
-    allowComposition: true, // you need to specify that!
     messages: messages
   });
 }

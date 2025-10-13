@@ -10,6 +10,8 @@
 
 
 
+import {BApp} from 'bootstrap-vue-next'
+
 import { ref } from 'vue'
 
 import {
@@ -265,11 +267,13 @@ import menuBlock from './components/menu-block.vue';
 
 
 <template>
-  <div id="App">
-    <menu-block />
-    "Hello"
-    <p>MAX_NUM_EQUATIONS = {{ MAX_NUM_EQUATIONS }} </p>
-  </div>
+  <BApp>
+    <BContainer id="App">
+      <menu-block />
+      "Hello"
+      <p>MAX_NUM_EQUATIONS = {{ MAX_NUM_EQUATIONS }} </p>
+    </BContainer>
+  </BApp>
 </template>
 
 

@@ -2,7 +2,16 @@
   import {ref, onMounted} from 'vue'
   import available_locales from "@/config/supported-locales"
 
+  import { BNavbar, 
+           BCollapse, 
+           BNavbarNav, 
+           BNavItem, 
+           BNavItemDropdown, 
+           BNavbarBrand} from 'bootstrap-vue-next';
   
+  
+
+
   function on_change_language(selected_language){
     if (this.$i18n.locale === selected_language){
       return;
@@ -21,36 +30,34 @@
 </script>
 
 <template>
-  
-  <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  </nav> -->
-
-  <b-navbar type="dark" variant="dark">
-    
-    <b-navbar-nav>
-      <b-nav-item href="https://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">
+  <BNavbar v-b-color-mode="'dark'" variant="secondary">
+    <BNavbarNav>  
+      <BNavItem href="https://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">
         {{$t('about')}}
-      </b-nav-item>
-    </b-navbar-nav>
-    
-    <!-- language selection -->
+      </BNavItem>
+    </BNavbarNav>
 
-    <b-navbar-nav class="ml-auto">
-      <b-nav-item href="https://github.com/guziy/arithmetics-practice">
+    <!-- Right aligned nav items -->
+    <BNavbarNav>
+      <BNavItem href="https://github.com/guziy/arithmetics-practice">
         <font-awesome-icon :icon="['fab', 'github']" />
-      </b-nav-item>
+      </BNavItem>
 
-      <b-nav-item-dropdown right id="language-bar">            
+      <!-- language selection -->
+      <BNavItemDropdown right>
         <template #button-content>
           <font-awesome-icon icon="globe" />
         </template>
-      </b-nav-item-dropdown>
-    </b-navbar-nav>
-
-  </b-navbar>
-  
+        <BDropdownItem 
+          v-for="(locale_display, locale_key) in available_locales"
+          :key="locale_key"
+        >
+          {{ locale_display }}
+        </BDropdownItem>
+      </BNavItemDropdown>
+    </BNavbarNav>
+  </BNavbar>
 </template>
-
 
 
 <style>
