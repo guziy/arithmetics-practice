@@ -1,5 +1,5 @@
 export default {
-    'fr': 'Français',
     'en': 'English',
+    'fr': 'Français',
     'uk': 'Українська' 
 }
