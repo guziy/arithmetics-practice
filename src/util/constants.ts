@@ -21,3 +21,6 @@ export const all_operations_symbols = {
 }
 
 
+//default number of equations
+export const DEFAULT_NUM_EQUATIONS = 10;
+
