@@ -1,14 +1,6 @@
 <script setup lang="ts">
 
 
-//import equation from './components/equation.vue'
-
-//import { required, integer, between } from 'vuelidate/lib/validators'
-
-//import image from "../assets/fireworks1.gif"
-//import image from '@assets/fireworks1.gif';
-
-
 
 import {BApp} from 'bootstrap-vue-next'
 
@@ -21,8 +13,8 @@ import {
   all_operations_text_labels,
   all_operations_symbols
 } from './util/constants.js'
-import EquationBlock from './components/equation-block.vue';
-import menuBlock from './components/menu-block.vue';
+import EquationBlock from './components/EquationBlock.vue';
+import TopMenu from './components/TopMenu.vue';
 
 /*
   data(){
@@ -269,7 +261,7 @@ import menuBlock from './components/menu-block.vue';
 <template>
   <BApp>
     <BContainer id="App">
-      <menu-block />
+      <TopMenu />
       "Hello"
       <p>MAX_NUM_EQUATIONS = {{ MAX_NUM_EQUATIONS }} </p>
     </BContainer>

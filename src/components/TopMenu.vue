@@ -1,23 +1,24 @@
 <script setup lang="ts">
-  import {ref, onMounted} from 'vue'
-  import available_locales from "@/config/supported-locales"
+  import {onMounted} from 'vue'
+  import {supportedLocales} from "../config/supported-locales"
+  import { useI18n } from 'vue-i18n';
 
   import { BNavbar, 
-           BCollapse, 
            BNavbarNav, 
            BNavItem, 
            BNavItemDropdown, 
-           BNavbarBrand} from 'bootstrap-vue-next';
+  } from 'bootstrap-vue-next';
   
   
+  const {t, locale} = useI18n();
 
-
-  function on_change_language(selected_language){
-    if (this.$i18n.locale === selected_language){
+  const onChangeLanguage = (locale_key: string) => {
+    //console.log(locale_key, locale)
+    if (locale.value === locale_key){
       return;
     }
-    console.log(selected_language);
-    this.$i18n.locale = selected_language;
+    // console.log(locale_key);
+    locale.value = locale_key;
   }
 
 
@@ -30,10 +31,13 @@
 </script>
 
 <template>
-  <BNavbar v-b-color-mode="'dark'" variant="secondary">
+  <BNavbar 
+    v-b-color-mode="'dark'" 
+    variant="secondary"
+  >
     <BNavbarNav>  
       <BNavItem href="https://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">
-        {{$t('about')}}
+        {{ t('about') }}
       </BNavItem>
     </BNavbarNav>
 
@@ -44,13 +48,17 @@
       </BNavItem>
 
       <!-- language selection -->
-      <BNavItemDropdown right>
+      <BNavItemDropdown 
+        right 
+        @change="onChangeLanguage($event)"
+      >
         <template #button-content>
           <font-awesome-icon icon="globe" />
         </template>
         <BDropdownItem 
-          v-for="(locale_display, locale_key) in available_locales"
-          :key="locale_key"
+          v-for="(locale_display, locale_key) in supportedLocales"
+          :key="locale_key" 
+          @click="onChangeLanguage(locale_key)"
         >
           {{ locale_display }}
         </BDropdownItem>

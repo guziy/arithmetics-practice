@@ -17,8 +17,16 @@ declare module 'vue' {
     BNavbarNav: typeof import('bootstrap-vue-next/components/BNavbar')['BNavbarNav']
     BNavItem: typeof import('bootstrap-vue-next/components/BNav')['BNavItem']
     BNavItemDropdown: typeof import('bootstrap-vue-next/components/BNav')['BNavItemDropdown']
-    EquationBlock: typeof import('./src/components/equation-block.vue')['default']
+    Equation: typeof import('./src/components/equation.vue')['default']
+    EquationBlock: typeof import('./src/components/EquationBlock.vue')['default']
+    EquationContainer: typeof import('./src/components/equation-container.vue')['default']
+    Menu: typeof import('./src/components/menu.vue')['default']
     MenuBlock: typeof import('./src/components/menu-block.vue')['default']
+    Options: typeof import('./src/components/options.vue')['default']
+    OptionsBlock: typeof import('./src/components/OptionsBlock.vue')['default']
+    OptionsContainer: typeof import('./src/components/options-container.vue')['default']
+    Topmenu: typeof import('./src/components/topmenu.vue')['default']
+    TopMenu: typeof import('./src/components/TopMenu.vue')['default']
   }
   export interface ComponentCustomProperties {
     vBColorMode: typeof import('bootstrap-vue-next/directives/BColorMode')['vBColorMode']
