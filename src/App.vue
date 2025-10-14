@@ -15,6 +15,7 @@ import {
 } from './util/constants.js'
 import EquationBlock from './components/EquationBlock.vue';
 import TopMenu from './components/TopMenu.vue';
+import OptionsBlock from './components/OptionsBlock.vue';
 
 /*
   data(){
@@ -262,7 +263,7 @@ import TopMenu from './components/TopMenu.vue';
   <BApp>
     <BContainer id="App">
       <TopMenu />
-      "Hello"
+      <OptionsBlock />
       <p>MAX_NUM_EQUATIONS = {{ MAX_NUM_EQUATIONS }} </p>
     </BContainer>
   </BApp>

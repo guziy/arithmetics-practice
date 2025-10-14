@@ -179,5 +179,5 @@ export default defineComponent({
            {{$t('integer_is_required')}}!
       </div>
   </div>
-</form>
+  </form>
 </template>
