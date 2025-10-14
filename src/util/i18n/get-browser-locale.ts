@@ -1,8 +1,5 @@
-export const getBrowserLocale = (options = {}) => {
-    const defaultOptions = { countryCodeOnly: false }
-  
-    const opt = { defaultOptions, options }
-  
+export const getBrowserLocale = (options = {countryCodeOnly: false}) => {
+    
     const navigatorLocale =
       navigator.languages !== undefined
         ? navigator.languages[0]
@@ -12,7 +9,7 @@ export const getBrowserLocale = (options = {}) => {
       return undefined
     }
   
-    const trimmedLocale = opt.countryCodeOnly
+    const trimmedLocale = options.countryCodeOnly
       ? navigatorLocale.trim().split(/-|_/)[0]
       : navigatorLocale.trim()
   
