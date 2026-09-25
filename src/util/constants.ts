@@ -6,19 +6,25 @@ export const MIN_NUM_EQUATIONS = 5;
 
 export const num_upper_limit_list = [20, 50, 100, 500, 1000, 10000]
 
-export const all_operations_text_labels = { // operation to text label map
-        "add": "addition",
-        "sub": "subtraction",
-        "mul": "multiplication",
-        "div": "division"
+
+export const all_operations_ids = ["add", "sub", "mul", "div"]
+
+export const all_operations_text_labels: Record<string, string> = { // operation to text label map
+        add: "addition",
+        sub: "subtraction",
+        mul: "multiplication",
+        div: "division"
 }
 
-export const all_operations_symbols = {
-        "add": "+",
-        "sub": "-",
-        "mul": "\u00D7",
-        "div": "\u00F7"
+export const all_operations_symbols: Record<string, string> = {
+        add: "+",
+        sub: "-",
+        mul: "\u00D7",
+        div: "\u00F7"
 }
+
+// initially by default select only addition and subtraction
+export const initially_selected_operations = ["add", "sub"]
 
 
 //default number of equations

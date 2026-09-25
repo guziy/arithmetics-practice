@@ -3,12 +3,8 @@
   import {supportedLocales} from "../config/supported-locales"
   import { useI18n } from 'vue-i18n';
 
-  import { BNavbar, 
-           BNavbarNav, 
-           BNavItem, 
-           BNavItemDropdown, 
-  } from 'bootstrap-vue-next';
-  
+  import { ElMenu, ElMenuItem, ElSubMenu } from 'element-plus'
+  import 'element-plus/es/components/menu/style/css' 
   
   const {t, locale} = useI18n();
 
@@ -31,58 +27,49 @@
 </script>
 
 <template>
-  <BNavbar 
-    v-b-color-mode="'dark'" 
-    variant="secondary"
+  <el-menu
+    mode="horizontal"
+    background-color="#6c757d"
+    text-color="#fff"
+    active-text-color="#fff"
+    :ellipsis="false"
+    class="custom-navbar"
   >
-    <BNavbarNav>  
-      <BNavItem href="https://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html">
+    <!-- Left Aligned Items -->
+    <el-menu-item index="about">
+      <a href="https://guziy.blogspot.com/2020/02/arithmetics-practice-app-for-my-son-in.html" target="_blank">
         {{ t('about') }}
-      </BNavItem>
-    </BNavbarNav>
+      </a>
+    </el-menu-item>
 
-    <!-- Right aligned nav items -->
-    <BNavbarNav>
-      <BNavItem href="https://github.com/guziy/arithmetics-practice">
+    <!-- Flex spacer to push remaining items to the right -->
+    <div class="flex-grow" />
+
+    <!-- Right Aligned Items -->
+    <el-menu-item index="github">
+      <a href="https://github.com/guziy/arithmetics-practice" target="_blank">
         <font-awesome-icon :icon="['fab', 'github']" />
-      </BNavItem>
+      </a>
+    </el-menu-item>
 
-      <!-- language selection -->
-      <BNavItemDropdown 
-        right 
-        @change="onChangeLanguage($event)"
+    <!-- Language selection -->
+    <el-sub-menu index="language">
+      <template #title>
+        <font-awesome-icon icon="globe" />
+      </template>
+      <el-menu-item 
+        v-for="(locale_display, locale_key) in supportedLocales"
+        :key="locale_key" 
+        :index="`lang-${locale_key}`"
+        @click="onChangeLanguage(locale_key)"
       >
-        <template #button-content>
-          <font-awesome-icon icon="globe" />
-        </template>
-        <BDropdownItem 
-          v-for="(locale_display, locale_key) in supportedLocales"
-          :key="locale_key" 
-          @click="onChangeLanguage(locale_key)"
-        >
-          {{ locale_display }}
-        </BDropdownItem>
-      </BNavItemDropdown>
-    </BNavbarNav>
-  </BNavbar>
+        {{ locale_display }}
+      </el-menu-item>
+    </el-sub-menu>
+  </el-menu>
 </template>
 
 
 <style>
-  #language-bar{
-    color: white;
-    background-color: black;
-  }
-
-
-  #language-bar a.current-language {
-    background-color: grey;
-  }
-
-  #language-bar .btn {
-    color: white;
-    background-color: black;
-    border-color: white;
-  }
-
+  
 </style>

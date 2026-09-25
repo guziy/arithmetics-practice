@@ -2,12 +2,16 @@
 
 
 import {createApp} from 'vue'
-
+//import { createBootstrap } from 'bootstrap-vue-next'
 
 import App from './App.vue'
 
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
+//import 'bootstrap/dist/css/bootstrap.min.css'
+// import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
+
+import ElementPlus from 'element-plus'
+import 'element-plus/theme-chalk/index.css'
+import 'element-plus/dist/index.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
@@ -28,16 +32,15 @@ library.add(faGlobe)
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 library.add(faGithub)
 
-
-
 import {getI18n} from './plugins/i18n'
 
 const app = createApp(App)
 
+// app.use(createBootstrap())
 
+app.use(ElementPlus)
 app.use(getI18n())
 app.component('font-awesome-icon', FontAwesomeIcon)
-
 app.mount('#app')
 
 
