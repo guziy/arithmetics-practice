@@ -1,43 +1,19 @@
 <script setup lang="ts">
-    import { reactive, computed, ref } from 'vue'
-    
-    import { useI18n } from 'vue-i18n';
-    const {t} = useI18n();
-
-    import { required, minValue, maxValue, integer } from '@vuelidate/validators'
+    import { reactive, computed } from 'vue'
+    import { useI18n } from 'vue-i18n'
+    import { required, minValue, maxValue, integer, helpers } from '@vuelidate/validators'
     import useVuelidate from '@vuelidate/core'
     import {
-        DEFAULT_NUM_EQUATIONS, 
-        initially_selected_operations, 
+        DEFAULT_NUM_EQUATIONS,
+        initially_selected_operations,
         MAX_NUM_EQUATIONS,
+        MIN_NUM_EQUATIONS,
         num_upper_limit_list
     } from '../util/constants'
+    import { get_operations } from '../util/operations'
 
-    import { 
-        get_operations,
-    } from '../util/operations';
+    const { t } = useI18n()
 
-    import { ElSelect, ElOption, 
-             ElContainer, ElForm, ElFormItem,
-             ElInput, ElInputNumber,
-             ElCheckboxGroup, ElCheckbox, 
-             ElRow, ElCol } from 'element-plus'
-
-    import 'element-plus/es/components/select/style/css'
-    import 'element-plus/es/components/option/style/css'
-
-    
-
-    const onStart = (event: Event) => {
-        event.preventDefault();
-        console.log(event);
-    }
-
-    const onChange = (event: Event) => {
-        console.log(equation_options);
-    }
-
-    //app options
     const equation_options = reactive({
         numberOfEquations: DEFAULT_NUM_EQUATIONS,
         operations: get_operations(),
@@ -48,150 +24,143 @@
         }
     })
 
+    const exerciseCountMessage = () =>
+        `${t('number_of_exercises_should_be')} ${MIN_NUM_EQUATIONS} ${t('and')} ${MAX_NUM_EQUATIONS}`
+
     const validations = computed(() => ({
         numberOfEquations: {
-            required, integer, 
-            min: minValue(1), 
-            max: maxValue(MAX_NUM_EQUATIONS)
+            required,
+            integer: helpers.withMessage(() => t('integer_is_required'), integer),
+            min: helpers.withMessage(exerciseCountMessage, minValue(MIN_NUM_EQUATIONS)),
+            max: helpers.withMessage(exerciseCountMessage, maxValue(MAX_NUM_EQUATIONS))
+        },
+        active_operation_ids: {
+            required: helpers.withMessage(
+                () => t('you_need_to_select_at_least_one_operation'),
+                required
+            )
         }
     }))
 
-    const v$ = useVuelidate(validations, equation_options);
+    const v$ = useVuelidate(validations, equation_options)
 
+    const fieldMessage = (field: { $error: boolean; $errors: { $message: unknown }[] }) => {
+        if (!field.$error || field.$errors.length === 0) return ''
+        return String(field.$errors[0].$message ?? '')
+    }
+
+    const onStart = async () => {
+        const valid = await v$.value.$validate()
+        if (!valid) return
+    }
 </script>
 
-
-
 <template>
+  <section class="setup">
+    <p class="greeting">{{ t('hello') }}</p>
 
+    <el-form label-position="top" @submit.prevent="onStart">
+      <el-form-item :label="t('pls_enter_your_name')">
+        <el-input
+          id="user-name-input"
+          v-model="equation_options.user.name"
+        />
+      </el-form-item>
 
-  <el-row id="intro-top" justify="center" align="middle">
-    <div>
-        <el-form :inline="true">
-            <el-form-item>
-                {{ t('hello') }},
-            </el-form-item>    
+      <el-form-item
+        :label="t('lets_do_few_exercises')"
+        :error="fieldMessage(v$.numberOfEquations)"
+      >
+        <el-input-number
+          id="input-num-exercises"
+          v-model="equation_options.numberOfEquations"
+          :min="MIN_NUM_EQUATIONS"
+          :max="MAX_NUM_EQUATIONS"
+          @change="v$.numberOfEquations.$touch()"
+        />
+      </el-form-item>
 
-            <el-form-item>
-                <el-input v-model="equation_options.user.name" 
-                    :placeholder="t('pls_enter_your_name')"
-                    id="user-name-input"
-                />
-            </el-form-item>
+      <el-form-item
+        :label="t('choose_operations')"
+        :error="fieldMessage(v$.active_operation_ids)"
+      >
+        <el-checkbox-group
+          v-model="equation_options.active_operation_ids"
+          class="operations"
+          @change="v$.active_operation_ids.$touch()"
+        >
+          <el-checkbox
+            v-for="op in equation_options.operations"
+            :key="op.id"
+            :value="op.id"
+          >
+            {{ t(op.label) }} ({{ op.symbol }})
+          </el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
 
-            <el-form-item>
-                {{ t('lets_do_few') }}
+      <el-form-item :label="t('i_can_compute_numbers_up_to')">
+        <el-select v-model="equation_options.current_num_max" class="limit-select">
+          <el-option
+            v-for="alimit in num_upper_limit_list"
+            :key="alimit"
+            :label="alimit"
+            :value="alimit"
+          />
+        </el-select>
+      </el-form-item>
 
-            </el-form-item>
-
-            <el-form-item>
-                <el-input-number id="input-num-exercises" 
-                                 v-model="equation_options.numberOfEquations"
-                                 :state="v$.numberOfEquations.$error ? false : null"
-                                 @input="v$.numberOfEquations.$touch()"
-                                 :min="1"
-                                 :max="MAX_NUM_EQUATIONS"
-                                 />
-            </el-form-item>
-
-            <el-form-item>{{ t('exercises') }}.</el-form-item>
-
-        </el-form>
-    </div>
-  </el-row>
-
-
-  <el-divider>Please adjust exercise complexity</el-divider>
-
-
-  <el-row :gutter="0" align="middle">
-    <el-col :span="11" class="centered-col">
-        <div>
-            <el-checkbox-group v-model="equation_options.active_operation_ids">
-                <el-checkbox 
-                    v-for="op in equation_options.operations"
-                    :key="op.id"
-                    :value="op.id"
-                    >
-                    {{ t(op.label)}} ({{op.symbol}}) 
-                </el-checkbox>
-
-            </el-checkbox-group>
-        </div>
-    </el-col>
-
-    <el-col :span="2" class="centered-col">
-        <el-divider direction="vertical" />
-    </el-col>
-    <el-col :span="11" class="centered-col select-wrapper">
-        <div>
-            {{ t('i_can_compute_numbers_up_to') }}
-            <el-select v-model="equation_options.current_num_max"
-            style="width: 100px;">
-                <el-option 
-                v-for="alimit in num_upper_limit_list"
-                :key="alimit" :label="alimit" :value="alimit">
-                </el-option>
-            </el-select>
-        </div>
-    </el-col>
-  </el-row>
-
-  <el-divider />
-  
-    <div>
-        <p> current number of eqs: {{equation_options.numberOfEquations}}</p>
-        <p> ops {{ equation_options.operations }} </p>
-        <p> user name: {{ equation_options.user.name }} </p>
-        <p> current max mnumber: {{ equation_options.current_num_max }}</p>
-        <p>active_operation_ids: {{ equation_options.active_operation_ids }}</p>
-    </div>
-        
-
-
+      <el-button type="primary" native-type="submit" class="start-button">
+        {{ t('yes_lets_start') }}
+      </el-button>
+    </el-form>
+  </section>
 </template>
 
-<style>
-    #input-num-exercises {
-        max-width: 100px;
-        text-align: right;
-    }
+<style scoped>
+.setup {
+  width: min(480px, 100%);
+  margin: 0 auto;
+  padding: 28px 28px 24px;
+  background: #fff;
+  color: #1f2933;
+  border-radius: 12px;
+  text-align: left;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+}
 
-    #user-name-input{
-        max-width: 200px;
-        text-align: center;
-        
-    }
+.greeting {
+  margin: 0 0 18px;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
 
-    .el-row {
-        margin-top: 10px;
-        margin-bottom: 10px;
-        width: 100%;
-        padding: 10px;
-    }
+.operations {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+}
 
-    .centered-col {
-        display: flex;
-        justify-content: center; /* Centers horizontally */
-        align-items: center;     /* Optional: Centers vertically too */
-        text-align: center;
-    }
+.limit-select {
+  width: 140px;
+}
 
-    #intro-top{
-        margin-top: 50px;
-        justify-content: center;
-    }
+.start-button {
+  width: 100%;
+  margin-top: 8px;
+}
 
-    /* 2. Keeps the label and the select dropdown cleanly inline side-by-side */
-    .select-wrapper {
-        display: inline-flex;
-        align-items: center;
-    }
+#input-num-exercises {
+  width: 160px;
+}
 
+@media (max-width: 480px) {
+  .setup {
+    padding: 20px 16px 16px;
+  }
 
-    :deep(.el-divider--vertical) {
-        margin: 0 0;                 /* Adjust spacing if needed */
-        display: inline-block;
-    }
-
+  .operations {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

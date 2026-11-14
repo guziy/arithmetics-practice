@@ -28,6 +28,7 @@ declare module 'vue' {
     Equation: typeof import('./src/components/equation.vue')['default']
     EquationBlock: typeof import('./src/components/EquationBlock.vue')['default']
     EquationContainer: typeof import('./src/components/equation-container.vue')['default']
+    Footer: typeof import('./src/components/Footer.vue')['default']
     Menu: typeof import('./src/components/menu.vue')['default']
     MenuBlock: typeof import('./src/components/menu-block.vue')['default']
     Options: typeof import('./src/components/options.vue')['default']
