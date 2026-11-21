@@ -29,9 +29,9 @@
 <template>
   <el-menu
     mode="horizontal"
-    background-color="#6c757d"
-    text-color="#fff"
-    active-text-color="#fff"
+    background-color="#1e293b"
+    text-color="#e2e8f0"
+    active-text-color="#409eff"
     :ellipsis="false"
     class="custom-navbar"
   >
@@ -70,6 +70,18 @@
 </template>
 
 
-<style>
-  
+<style scoped>
+.custom-navbar {
+  border-bottom: 1px solid #334155;
+  padding: 0 16px;
+}
+
+.custom-navbar a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
 </style>

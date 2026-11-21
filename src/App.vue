@@ -24,7 +24,7 @@ html, body, input, button, select, textarea {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #16181d;
+  background: #0f172a;
 }
 
 :deep(input),
