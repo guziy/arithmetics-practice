@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { reactive, computed } from 'vue'
+    import { reactive, computed, watch } from 'vue'
     import { useI18n } from 'vue-i18n'
     import { required, minValue, maxValue, integer, helpers } from '@vuelidate/validators'
     import useVuelidate from '@vuelidate/core'
@@ -12,7 +12,9 @@
     } from '../util/constants'
     import { get_operations } from '../util/operations'
 
-    const { t } = useI18n()
+    const { t, locale } = useI18n()
+
+    const defaultNames = ['Guest', 'Invité', 'Гість']
 
     const equation_options = reactive({
         numberOfEquations: DEFAULT_NUM_EQUATIONS,
@@ -21,6 +23,21 @@
         current_num_max: num_upper_limit_list[0],
         user: {
             name: t('guest')
+        }
+    })
+
+    const isDefaultName = computed(() => {
+        return defaultNames.includes(equation_options.user.name) || equation_options.user.name === t('guest')
+    })
+
+    const nameInputStyle = computed(() => ({
+        fontFamily: 'Avenir, Helvetica, Arial, sans-serif',
+        color: isDefaultName.value ? 'var(--el-text-color-secondary, #909399)' : undefined
+    }))
+
+    watch(locale, () => {
+        if (isDefaultName.value) {
+            equation_options.user.name = t('guest')
         }
     })
 
@@ -63,7 +80,10 @@
       <el-form-item :label="t('pls_enter_your_name')">
         <el-input
           id="user-name-input"
+          class="user-name-input"
           v-model="equation_options.user.name"
+          :class="{ 'is-default-name': isDefaultName }"
+          :input-style="nameInputStyle"
         />
       </el-form-item>
 
@@ -152,6 +172,16 @@
 
 #input-num-exercises {
   width: 160px;
+}
+
+.user-name-input :deep(.el-input__inner),
+#user-name-input {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
+
+.user-name-input.is-default-name :deep(.el-input__inner),
+#user-name-input.is-default-name {
+  color: var(--el-text-color-secondary, #909399);
 }
 
 @media (max-width: 480px) {

@@ -12,6 +12,12 @@ import OptionsBlock from './components/OptionsBlock.vue';
   </div>
 </template>
 
+<style>
+html, body, input, button, select, textarea {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
+</style>
+
 <style scoped>
 .app {
   min-height: 100vh;
@@ -19,6 +25,13 @@ import OptionsBlock from './components/OptionsBlock.vue';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: #16181d;
+}
+
+:deep(input),
+:deep(button),
+:deep(select),
+:deep(textarea) {
+  font-family: inherit;
 }
 
 main {
