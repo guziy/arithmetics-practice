@@ -8,36 +8,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    BCol: typeof import('bootstrap-vue-next/components/BContainer')['BCol']
-    BCollapse: typeof import('bootstrap-vue-next/components/BCollapse')['BCollapse']
-    BContainer: typeof import('bootstrap-vue-next/components/BContainer')['BContainer']
-    BDropdown: typeof import('bootstrap-vue-next/components/BDropdown')['BDropdown']
-    BDropdownItem: typeof import('bootstrap-vue-next/components/BDropdown')['BDropdownItem']
-    BForm: typeof import('bootstrap-vue-next/components/BForm')['BForm']
-    BFormCheckbox: typeof import('bootstrap-vue-next/components/BFormCheckbox')['BFormCheckbox']
-    BFormGroup: typeof import('bootstrap-vue-next/components/BFormGroup')['BFormGroup']
-    BFormInput: typeof import('bootstrap-vue-next/components/BFormInput')['BFormInput']
-    BFormRow: typeof import('bootstrap-vue-next/components/BForm')['BFormRow']
-    BNav: typeof import('bootstrap-vue-next/components/BNav')['BNav']
-    BNavbar: typeof import('bootstrap-vue-next/components/BNavbar')['BNavbar']
-    BNavbarBrand: typeof import('bootstrap-vue-next/components/BNavbar')['BNavbarBrand']
-    BNavbarNav: typeof import('bootstrap-vue-next/components/BNavbar')['BNavbarNav']
-    BNavItem: typeof import('bootstrap-vue-next/components/BNav')['BNavItem']
-    BNavItemDropdown: typeof import('bootstrap-vue-next/components/BNav')['BNavItemDropdown']
-    BRow: typeof import('bootstrap-vue-next/components/BContainer')['BRow']
-    Equation: typeof import('./src/components/equation.vue')['default']
     EquationBlock: typeof import('./src/components/EquationBlock.vue')['default']
-    EquationContainer: typeof import('./src/components/equation-container.vue')['default']
     Footer: typeof import('./src/components/Footer.vue')['default']
-    Menu: typeof import('./src/components/menu.vue')['default']
-    MenuBlock: typeof import('./src/components/menu-block.vue')['default']
-    Options: typeof import('./src/components/options.vue')['default']
     OptionsBlock: typeof import('./src/components/OptionsBlock.vue')['default']
-    OptionsContainer: typeof import('./src/components/options-container.vue')['default']
-    Topmenu: typeof import('./src/components/topmenu.vue')['default']
     TopMenu: typeof import('./src/components/TopMenu.vue')['default']
-  }
-  export interface ComponentCustomProperties {
-    vBColorMode: typeof import('bootstrap-vue-next/directives/BColorMode')['vBColorMode']
   }
 }
