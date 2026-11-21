@@ -20,7 +20,7 @@
         active_operation_ids: initially_selected_operations,
         current_num_max: num_upper_limit_list[0],
         user: {
-            name: 'Guest'
+            name: t('guest')
         }
     })
 

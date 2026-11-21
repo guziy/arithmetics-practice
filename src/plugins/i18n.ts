@@ -6,6 +6,7 @@ import { createI18n } from 'vue-i18n'
 const messages = {
   'fr': {
          'hello': 'Salut',
+         'guest': 'Invité',
          'pls_enter_your_name': 'Entrez votre nom SVP',
          'lets_do_few_exercises': 'faisons quelques exercices',
          'lets_do_few': 'faisons quelques',
@@ -35,6 +36,7 @@ const messages = {
          'sec': "sec",
         },
   'en': {'hello': 'Hi',
+         'guest': 'Guest',
          'pls_enter_your_name': 'Please enter your name',
          'lets_do_few_exercises': "let's do few exercises",
          'lets_do_few': "let's do few",
@@ -63,6 +65,7 @@ const messages = {
          'show_all_equations': "Show all equations",
         },
   'uk': {'hello': 'Привіт',
+        'guest': 'Гість',
         'pls_enter_your_name': "Будь ласка, введіть своє ім'я",
         'lets_do_few_exercises': "виконаємо кілька вправ",
         'lets_do_few': "давайте зробимо декілька",
